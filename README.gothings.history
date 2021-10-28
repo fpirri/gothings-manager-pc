@@ -1,0 +1,1729 @@
+****************************************************************************************************
+                                                                                            GoThings
+****************************************************************************************************
+
+---------------------------------------------------------------------------------------------------- 2019-12-02
+                                                                               Cloud GOTHINGS system
+
+                                                                                TUTTO DA FARE
+                                                                                BUTTARE ?
+Scopo:
+  - Metteremo qui una sintesi della parte cloud di GOTHINGS
+
+Note:
+  --> ....
+
+
+****************************************************************************************************
+
+****************************************************************************************************
+
+----------------------------------------------------------------------------------------------------
+                                                                                       History Index
+               per la storia precedente, cerca:     *** STORIA ***
+                               lavoro iniziale:     *** WP-Multi RESTART ***
+
+                       --- altri elementi storici significativi ---
+
+                  Per cut & paste interessanti:     CUT & PASTE library  -  INIT
+
+last commit:
+       pala - ... - 00 - xxx.00
+     vmatic - ... - 00 - xxx.00
+
+
+****************************************************************************************************
+
+----------------------------------------------------------------------------------------------------
+                                                                                      Internal Index
+Direct jump to interesting points:      <-- search for the below terms
+
+*** STRATEGIA ***
+    ... sottopunto ...
+        ... altro sottopunto ...
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\\\
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+====================================================================================================
+====================================================================================================
+=================================================================================================\\\
+-------------------------------  .../WP-Sviluppi/gothings/README.gothings.cloud.2021-05-31
+
+Contiene molte cose interessanti
+  --> installazione e valutazione dei plugin potenzialmente utili
+  
+
+
+==================================================================================================
+                                                                 *** Gocloud - Program strategy ***
+
+
+=====================================================================================================\
+                                                                                       Gothings Tech  |
+                                                                                       Concetti base  |
+
+Premessa:
+  Per l' "Internet delle Cose" Gothings e' l'analogo del sistema operativo per un computer
+  Gothings consente all'utente di usare una astrazione di livello superiore per le sue 'cose'
+
+Obiettivo:
+1.- Ridurre al minimo le conoscenze tecniche necessarie ad un utente per usare gothings
+    su un insieme di schede collegate su una LAN
+      <-- il target ideale e' la facilita' di uso delle app di un telefonino
+      <-- in pratica si accetta che le conoscenze dell'utente gli consentano di usare
+          una raspberry per progetti fai-da-te
+2.- Si parte da schede raspberry, concettualmente e' estendibilea tutte le schede che che
+    usino una distribuzione debian-like
+3.- ?
+
+Caso Cloud:
+
+costruire un cloud di supporto
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  VERIFICARE & AGGIORNARE la struttura delle app
+problema:
+  - il software di sviluppo della app deve stare tutto in un .tar.gz
+  - per mantenerlo separato da tutto il resto su github lo si mette in:
+      .../gothings-app/<app>/<app>dirs.tar.gz
+  - le droplet interessate alla app sono 2:
+      nginx-http-proxy            attualmente gothings-v01-03
+      <droplet-app>               attualmente gothings-v09
+  - ne consegue che sia expand che init & forse anche install devono essere cambiate !
+      <-- come si generalizzano ???
+      <-- mettiamo un bash script su tutti?       <-- direi di si
+  - da vedere soprattutto la parte sulla droplet nginx
+
+                                                                                                fine  |
+=====================================================================================================/
+
+
+
+=====================================================================================================\
+                                                                                       Gothings Tech  |
+                                                                                       START droplet  |
+- si parte da una droplet creata con gli 'user data':
+               .../gothings/wpmulti-dev/gothingsserverinit.sh
+  - la droplet e' stata creata con:
+    - OS:  Ubuntu 18.04.3 LTS (GNU/Linux 4.15.0-72-generic x86_64)
+    - admin ssh con certificato
+    - installazione docker-ce & docker-compose   (Docker version 19.03.5, build 633a0ea838)
+    - lettura del bootstrap 'c' da:
+        https://github.com/fpirri/gothings-install/raw/master/c
+- si gira ./c per fare il download di gocloud da:
+        https://github.com/fpirri/gothings-cloud/raw/master/gocloud
+- viene lanciato gocloud che gestira' automaticamente la costruzione del sistema gothings
+
+
+                                                                                                fine  |
+=====================================================================================================/
+
+
+=====================================================================================================\
+                                                                                       Gothings Tech  |
+                                                                     gocloud: strategia di bootstrap  |
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ DA INTEGRARE QUI:
+
+  strategia di bootstrap in:    GOTHINGS cloud v04     strategia di bootstrap
+
+e anche:
+  strategia di bootstrap in:    *** WPMulti v0.01.03 ***
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+Nota:   <appname>        nome dell'applicazione, es. 'wp'
+        <gothings-apps>  repository github: https://github.com/fpirri/gothings-apps/blob/master/
+                          
+- il bootstrap avviene, in accordo a file di configurazione .json, in piu' fasi:
+
+    - expand        assicura la presenza nella droplet dell'archivio '<appname>dirs.tar.gz'
+                    in mancanza lo scarica da:
+                      <gothings-app>/<appname>/<appname>dirs.tar.gz
+                    verifica l'esistenza del file di configurazione json:
+                      ~/dockrepo/dockimages/<appname>/<appname>expand.json
+                    se non e' presente lo scarica da github:
+                      <gothings-app>/<appname>/dockrepo/dockimages/<appname>/<appname>expand.json
+
+    - init          esecuzione di una fase di inizializzazione, prima dell'installazione
+                    verifica l'esistenza del file di configurazione json:
+                      ~/dockrepo/dockimages/<appname>/<appname>init.json
+                    se non e' presente lo scarica da github:
+                      <gothings-app>/<appname>/dockrepo/dockimages/<appname>/<appname>init.json
+                    eventualmente, si richiama il bash script indicato nel .json
+    - install       installazione definitiva dei programmi necessari a gocloud
+                    *** fase non ancora ben definita & dipendente dall'aspplicazione ***
+
+- i file di configurazione contengono la chiave 'status' con valori:  'todo' e 'done'
+    - todo          viene eseguita la fase specificata
+                    se il risultato e' corretto (retvalue=0) lo status passa a 'done'
+    - done          si prosegue senza fare niente
+  - lo status e' automaticamente aggiornato dallo script gocloud-appname
+    
+  - essi fanno eseguire uno specifico script bash
+- durante lo sviluppo:
+  - si puo' aggiornare localmente 'clouddirs.tar.gz', che non verra' sostituito dalla
+    versione ufficiale su github
+  - si possono modificare manualmente i .json locali per ri-eseguire una fase
+
+
+vecchie note sulla strategia:
+Scopo:
+  - gestire il ciclo di vita del sistema gocloud con l'aiuto di un menu
+  - devono essere NON NECESSARIE conoscenze su docker, cloud, etc. 
+
+Svolgimento:
+- si creano su digitalocean tutte le droplet che servono
+- si mette sul PC uno script che consente di andare a gestirle una a una
+- si esegue una sequenza di controllo su ogni droplet ...
+- FATTO!
+
+
+                                                                                                fine  |
+=====================================================================================================/
+
+
+=====================================================================================================\
+                                                                                       Gothings Tech  |
+                                                                    Struttura del progetto su github  |
+
+repository:
+  https://github.com/fpirri/gothings-apps/blob/master/
+
+contenuto:
+  /                               file standard come LICENSE, .gitignore, README.md, etc.
+  /<appname>/                     sezione dedicataalla applicazione <appname>
+    gocloud-<appname>             programma di gestione dell'applicazione
+    <appname>dirs.tar.gz          archivio della parte 'sysdata'dell'applicazione
+    dockrepo/                     dir base per tutte le applicazioni nella droplet
+      dockimages/                 dir per le configurazioni
+        <appname>/                dir per i file .json della configurazione
+          <appname>expand.json    configurazione per la fase expand
+          <appname>init.json      configurazione per la fase expand
+          <appname>install.json   configurazione per la fase expand
+
+note:
+  - in pratica, se i file di cui sopra sono presenti nella droplet,
+    tutto funziona anche senza github
+
+  - i file *dirs.tar.gz contengono:
+      dockrepo/                       dir base per ogni applicazione gothings
+        sysdata/                      sezione dati per <appname>
+          <appname>/                  dir base per la particolare applicazione
+            gothings<appname>.yml     docker-compose configuration file
+            .env-<appname>            environment value per docker-compose
+            <appname>config/          dir per la configurazione dell'applicazione
+              ./*                     .json & .sh files per la configurazione
+          <*>/                        eventuali altri dir necessari, es.: 'htdocs'
+            ./*                       file utili all'applicazione
+
+---------------------
+- esempio per l'applicazione 'wp'
+
+==================================================================================================
+                                                                                       Gothings Tech  |
+                                                                           Creazione droplet - START  |
+
+vedi:  ??? doc base ???                                                               CERCA E VERICA
+
+Creazione standard di una droplet su DigitalOcean (DO)
+
+Procedimento testato con le droplet piu' piccole, secondo DO uguale per tutte
+
+Nel menu' di creazione:
+  - scegli l'immagine Ubuntu 18.04
+  - scegli l'opzione: ssh con certificato
+      <-- metti il tuo certificato (anche piu' di uno)
+  - inserisci il file ...                                                                           DA AGGIUSTARE
+  - scegli il taglio della droplet
+  - aggiusta il nome
+  - VAI !
+--> viene creata la droplet con le opzioni scelte
+--> viene eseguito lo script caricato, che:
+    --> installa docker e docker-compose
+    --> carica alcuni programmi necessari:
+          - jq                  funzioni json per bash script
+          - ??                                                                                      DA AGGIUSTARE
+--> legge su github lo script c, lo rende eseguibile e lo esegue                                    DA AGGIUSTARE ?
+--> c scarica il menu 'gocloud'
+
+                                                                    MENU GOCLOUD                    DA FARE
+
+
+                                                                            Creazione droplet - fi
+
+=================================================================================================
+                                                                     *** NODE Service - v0.00.1 ***
+
+Scopo:
+- risorsa HTTP che esegue una funzione predefinita, realizzata in nodejs
+  - la risorsa calcola una risposta in base ai parametri che riceve
+  - in linea di principio la risposta dovrebbe essere usabile da uno script bash
+  - la risposta dovrebbe anche essere facilmente usabile da un umano con un browser
+
+Struttura del progetto
+*** vedi sopra:   Struttura del progetto su github
+
+Dettagli:
+- uno script bash puo' chiamare la risorsa usando curl
+- richiamabile da browser, con interpretazione umana
+  (vedi anche PHP service & TEMPLATE per idea di base)
+- con accesso al MariaDB (stessa droplet ?)
+- header 'sicuro': risponde SOLO alle chiamate CURL dalle droplet                                   DA FARE
+    <-- per ora si affida alla presenza di headers ed alla condivisione di un segreto
+    <-- nginx proxy aggiunge un proprio header (sovrascrivendo eventuali header esterni)
+    <-- uno o piu' header ricavati da file (ritenuti sicuri)
+- restituisce valori usabili in bash                                                                DA FARE
+- realizzato anche tramite inclusione di file nodejs da includere nel sorgente
+
+==============================================================================================
+                                                                                        NODE Service  |
+                                                                             NODEJS TEMPLATE - START  |
+                                                                                                    IN CORSO
+Scopo del template e' fornire un punto di partenza per la realizzazione di servizi NODEJS
+- Vengono realizzate in maniera univoca tutte le funzioni comuni ad ogni applicazione
+- il template usa tre file .js che vengono inclusi nell'applicazion template:
+    node-testata.js    <-- testata HTTP: title, start body, php functions declaration
+                           <-- contiene le funzioni PHP:
+                                 print_r2($val)   stampa 'carina' della variabile $val
+    node-secure.js     <-- controllo della chiamata, eventuale terminazione
+                           <-- eventualmente, TRY_X consente di bypassare i controlli
+                               durante lo sviluppo
+                           <-- assicurarsi che TRY_X sia 'false' in produzione
+                           <-- NON dovrebbe essere variato nelle varie applicazioni
+    node-content.js    <-- body del programma, specifico per ogni servizio
+                           <-- possibilmente, emettere uscita facilmente interpretabile
+                               da una chiamata da terminale 
+    node-footer.js     <-- terminazione del programma
+                           <-- print X_DEBUG ed esci dal programma
+                           <-- il valore di EXIT_CODE viene stampato sull'uscita
+                               ed e' disponibile come exit code a bash nel terminale
+
+Come usare i templates:
+- vai nel dir .../sysdata/php/var_www/html/
+- esegui una copia di template.js ed assegna un nome, es.: myservice.js
+  - edit il file myservice.js ed esegui la sostituzione:
+       require 'php-content.js';   ==>   require 'myservice-content.js';
+- esegui una copia di content.js ed assegna il nome: myservice-content.js
+  - modifica myservice-content.js per eseguire il servizio che credi
+- esegui le prove necessarie dal terminale e/o dal browser:
+      curl -v 'http://10.133.94.60/template.js?X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolino&RES_DEBUG=1'
+      http://php.gothings.org/template.js?X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolino&RES_DEBUG=1'
+  
+
+
+
+===> mysql da terminale ...
+      mysql -u root -pGTH2020_quattro_marzo
+      show databases;
+      select host, user from mysql.user;
+      mysql -u wpuser -ppenna_matita_gomma
+
+      select host, user, authentication_string from mysql.user;
+      select host, user from mysql.user;
+      CREATE USER 'wpuser'@'10.133.3.65' IDENTIFIED BY 'penna_matita_gomma';
+      CREATE USER 'wpuser'@'172.29.%';
+      CREATE USER 'root'@'172.29.%';
+      DROP USER 'wpuser'@'10.133.3.65';
+      GRANT ALL PRIVILEGES ON gtlite.* TO 'wpuser'@'10.133.%';
+      show grants for 'wpuser'@'10.133.%';
+
+
+
+
+
+                                                                              NODEJS TEMPLATE - FINE  |
+
+===================================================================================================
+                                                                       *** Service WP - v0.01.07 ***
+*** Generalizzazione delle App ***
+
+Dopo gli sviluppi precedenti:
+    *** Service WP - v0.01.06 ***             in STORIA
+    *** Service NGINX - v0.01.03 ***          non ancora completamente generalizzato
+
+
+Scopo: 
+- un servizio per eseguire funzioni PHP predeterminate
+- usare wordpress come ambiente amministrativo
+    <-- ~ ZERO contenuto pubblico
+    <-- usare SOLO la parte amministrazione
+    <-- usare tabelle custom nel DB per i dati delle COSE
+- utilizzare la REST API di wordpress per svolgere il lavoro
+
+--------------------------------------------------------------------------------
+                                                        installazione WP Service
+
+Struttura archivio su github:
+
+  https://github.com/fpirri/gothings-app-servicewp/   <-- repository di servicewp (a gothings app for the cloud)
+      dockrepo/dockimages/servicewp/                  <-- file della app service
+          serviceexpand.json                          <-- espansione dei file
+          serviceconfig.json                          <-- configurazione della app
+          serviceinit.json                            <-- inizializzazione della app
+      servicewpdirs.tar.gz                            <-- archivio file della app service
+      app-go                                          <-- script di gestione della app
+      APPNAME                                         <-- dati di configurazione per servicewp
+
+- app-go e' abbastanza generalizzato, nel senso che molte funzioni dovrebbero   <-- IN AGGIUSTAMENTO ...
+  funzionare anche per altre app, semplicemente aggiustando i valori della variabile
+  bash 'AppName' ed altre, riportate nella testata dello script
+
+
+------------------------------------------------ per i lavori precedenti vedere:
+- doc precedente in:     *** Service WP - v0.01.06 *** bis
+              nella:     *** STORIA ***
+--------------------------------------------------------------------------------
+
+- si e' aggiunta la fase 'verify environment' che dovrebbe consentire l'inserzione
+  delle variabili di configurazione, creazione del db etc.
+- configure environment:
+    <-- vedi commenti in servicewp-go
+
+- procedura di aggiornamento file servicewpdirs.tar.gz on github
+  --> sequenza da GUI sul PC:                             <== da GUI lo script NON PARTE !!
+    - edit la copia locale nella droplet finche' non ottieni il risultato voluto
+        <-- se servicewpexpand.json esiste gia' esso NON viene ri-caricato sda github
+    - rifai l'archivio .tar.gz del progetto :
+      - sul PC, vai a:  .../NetBeansProjects/github-gothings/gothings-app-servicewp-aux/
+        esegui:  ServicewpDirs        (icona terminal)
+          <-- viene creato il nuovo servicewpdirs.tar.gz
+      - commit local repo project gothings-app-servicewp:
+              app-servicewp - 0.11 - commit & push to remote (new .tar.gz in github)
+- rimandato a dopo:                        <-- roba fatta a mano (per ora)
+  - copy sites-enabled ...  (fase config)
+  - restart nginx dopo aggiunta dei servizi
+
+------ generalizzazione nginx
+- ref per certbot:
+    1.  https://certbot.eff.org/docs/using.html#where-are-my-certificates
+    2.  https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
+    3.  https://www.cloudbooklet.com/how-to-install-nginx-and-lets-encrypt-with-docker-ubuntu-20-04/
+- tentativo 1
+  <-- assegnare alla droplet un dominio base (pirri.me ?)
+  - definire il dir per i certificati
+  - aggiungere una sezione a nginx per il certbot ??
+      <-- provo questa ...
+      <-- portato nginx-go in .../github-gothings/gothings-app-servicewp-aux/nginx-new/nginx-go
+  - chmod 755 da ref.1
+
+.................................................................... tentativo 2
+- Per aggiungere un certificato con l'opzione webroot serve un nginx che funzioni
+  sulla porta 80
+- la configurazione nginx deve vedere i files:
+          options-ssl-nginx.conf        <-- TLS config per nginx
+          ssl-dhparams.pem              <-- rendi compatibile la struttura dei dir
+  che vengono forniti da certbot:
+      https://github.com/certbot/certbot/raw/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf
+      https://github.com/certbot/certbot/raw/master/certbot/certbot/ssl-dhparams.pem
+- si usano i volumi docker:
+          ~/dockrepo/sysdata/nginx/data/certbot/conf   :  /etc/letsencrypt
+          ~/dockrepo/sysdata/nginx/data/certbot/www    :  /var/www/certbot
+- in definitiva, si prendono da github i file: 
+          ~/dockrepo/sysdata/nginx/data/certbot/conf/options-ssl-nginx.conf
+                                                 .../ssl-dhparams.pem
+- il root dir del sito per certbot e':
+          ~/dockrepo/sysdata/nginx/data/certbot/www    :  /var/www/certbot
+- il certificato del sito $domain e' nel file:
+          /etc/letsencrypt/live/$domain
+  che corrisponde (nella droplet) a:
+          ~/dockrepo/sysdata/nginx/data/certbot/conf/live/
+  --> permessi originali 700, cambiabili in 0755
+  --> ref 1. :  ... fix this using chmod 0755 /etc/letsencrypt/{live,archive}
+
+................. tentativo 2.a
+===> vediamo come ref 2. crea il certificato: openssl req -x509
+       --> quale .yml usa?
+
+................. tentativo 2.b
+===> facciamo un certbot-go per la gestione dei certificati
+
+================================> possibile strada
+- girare la creazione nginx & certbot per il caso "test"
+    <-- dividere in due, con nginx & certbot azionati separatamente ...?
+- aggiungere un certbot specifico per ogni servizio aggiuntivo
+    <-- sezione 'certbot' all'interno di nginx-go ?                             DA RIVEDERE
+    <-- file json quando si configura un nuovo servizio ?                       DA RIVEDERE
+    <-- sezione 'https' in ogni nuovo servizio ?                                DA RIVEDERE
+
+------------------------------------------------------------ NOTE su letsencript
+dir creati da certbot in /etc/letsencript/:
+drwx------ 3 root  root  4096 Aug 17  2020 accounts
+drwx------ 3 root  root  4096 Aug 17  2020 archive
+drwxr-xr-x 2 root  root  4096 Nov 23 23:26 csr
+drwx------ 2 root  root  4096 Nov 23 23:26 keys
+drwx------ 3 root  root  4096 Aug 17  2020 live
+drwxr-xr-x 2 root  root  4096 Aug 17  2020 renewal
+drwxr-xr-x 5 root  root  4096 Aug 17  2020 renewal-hooks
+
+README:
+--> sudo cat dockrepo/sysdata/nginxdata/certbot_etc/live/gothings.org/README
+This directory contains your keys and certificates.
+
+`privkey.pem`  : the private key for your certificate.
+`fullchain.pem`: the certificate file used in most server software.
+`chain.pem`    : used for OCSP stapling in Nginx >=1.3.7.
+`cert.pem`     : will break many server configurations, and should not be used
+                 without reading further documentation (see link below).
+
+WARNING: DO NOT MOVE OR RENAME THESE FILES!
+         Certbot expects these files to remain in this location in order
+         to function properly!
+
+We recommend not moving these files. For more information, see the Certbot
+User Guide at https://certbot.eff.org/docs/using.html#where-are-my-certificates.
+
+--------------------------------------------------------------------------------
+
+.................................................................... tentativo 3
+- rivedendo ref 2. :
+  - adattare nginx-go separando nginx da certbot
+      <-- mantenere la coerenza dei volumi
+  - girare una versione adattata di .../init-letsencrypt.sh nella fase verify-x?  DA AGGIUSTARE
+                                                                           <====  CI STO LAVORANDO
+  - aggiungere una sezione certbot al menu' di nginx
+
+
+
+................................................................................
+
+-                                                                               SONO QUI
+
+Upload project to github:
+  https://javawithumer.com/2019/07/how-to-upload-netbeans-project-to-github.html
+
+--> commit:
+              app-nginx - 0.22 - update nginx-go - 07
+              app-servicewp - 0.16 - coordinamento con nginx
+
+--------------------------------------------------------------------------------
+
+================================================================================================
+                                                                       *** PHP Service - v0.00.3 ***
+
+Scopo: 
+- un servizio per eseguire funzioni PHP predeterminate
+
+Dettagli:
+- chiamabile da bash script, usando CURL
+- con accesso al MariaDB (stessa droplet)
+- header 'sicuro': risponde SOLO alle chiamate CURL dalle droplet                                   DA FARE
+    <-- per ora si affida alla presenza di headers ed alla condivisione di un segreto
+    <-- nginx proxy aggiunge un proprio header (sovrascrivendo eventuali header esterni)
+    <-- uno o piu' header ricavati da file (ritenuti sicuri)
+- restituisce valori usabili in bash                                                                DA FARE
+- realizzato anche tramite inclusione di file PHP pre-compilati
+
+refs:
+https://hub.docker.com/_/php
+  <-- immagine docker del PHP
+https://www.pascallandau.com/blog/php-php-fpm-and-nginx-on-docker-in-windows-10/
+  <-- esempio dettagliato (sotto windows, ma utile ...)
+https://stackoverflow.com/questions/29905953/how-to-correctly-link-php-fpm-and-nginx-docker-containers
+  <-- consigli utili ...  ** leggere TUTTO prima di proseguire ...
+
+
+-------------------------------------------------------------- Installazione PHP
+droplet:
+  yesfi@104.248.95.29      <-- MariaDB per il cloud gothings
+
+ref.:
+https://dev.to/truthseekers/setup-a-basic-local-php-development-environment-in-docker-kod
+  <-- usa php-docker ufficiale con docker-compose
+-->
+- scegliamo come dir di lavoro:
+    .../gothings/servicephp/dockrepo/sysdata/servicephp/var_www/html/index.orig.php
+  --> il dir .../var_www/html/ conterra' i sorgenti del ServicePHP
+      all'inizio il file index.php e' un semplice script di test (hello)
+      in seguito verra' sostituito da index.orig.php (vedi vecchia documentazione in ???)
+--------- nota di lavoro:
+Ogni 'app' che deve girare su una droplet 'vive' nel dir ~/dockrepo/sysdata/<app name>
+  --> ~/dockrepo/ e' il dir base di TUTTO il codice GoThings
+      ~/dockrepo/sysdata/ contiene TUTTE le varie applicazioni
+      ~/dockrepo/sysdata/<app name> contiene il codice della particolare app
+  --> al run time docker trasporta in ogni container i dati relativi alla particolare app
+  --> le applicazioni 'globali' (come nginx) hanno dei sysdata specifici
+--------------- fine nota
+- abbiamo scritto le utilities:
+    go_servicephp               fare source (. go_servicephp) per andare al dir di lavoro
+    servicephp_start        per fare 'up' del servizio
+    servicephp_stop         per fermare il servizio php
+    servicephp_down         per eliminare il contenitore del servizio
+
+
+---------------------------------------------------------  NGINX setup originale
+
+In partenza il dir ~/dockrepo/sysdata/nginxdata/sites-enabled/ contiene:
+- siti  wpm :
+    test          test base - root /var/www/test/ 
+                  passare/aggiungere https ??
+    iot           parte https
+                    <-- redirection 80-->443 in wpms
+                  accesso ad apps con nomi dinamici su redis
+                    <-- apps nei subdirectory
+    *             siti anonimi eliminati - rivedere ?
+                  da coordinare con wpms
+
+- siti  wpms :
+    www           sito base default
+    cloud
+    things
+    wpwork
+    phpmyadmin    coordinato con wpm
+    *             multisite con nome generico            <-- cambiare ?
+                  ultima istanza, aggiustare !
+    <base>        gothings.org (senza nome aggiunto)     <-- serve ?
+    80-->443      redirect http-->https per tutti i siti
+                    <-- certbot                             rinnovo certificato  DA FARE
+
+--------------------------------------------------------------------------------
+-------------------------------------------------------------  NGINX nuovo setup
+
+- aggiunto redirect http-->https per servicephp
+                                                                   DA RIVEDERE :
+*.gothings.org      eliminare i siti dinamici/anonimi in wpms??
+iot...              accesso alle applicazioni node.js  <-- https ??
+                      <-- mettere in un file separato (NO in wpm)
+phpmyadmin...       correggere il file nginx in 'myadmin'
+                      <-- mettere in un file separato (NO in wpms)
+
+                                                                       DA FARE :
+aggiustare certbot
+  <-- verificare il processo di aggiornamento: tutti insieme o uno alla volta?
+
+Proposta:
+port 80
+  base80            redirection da http a https & certbot            <-- da wpms
+  test              sito statico per semplice test del sistema       <-- da wpm
+port 443:
+  wpmultisite       siti wordpress                                   <-- da wpms
+  myadmin           phpmyadmin                                       <-- da wpms
+  iot               applicazioni GoThings <-- portare su https       <-- da wpm
+  servicephp        servizi ausiliari (in php)                       <-- nuovo
+
+
+---------------------------------------------------------  Revisione NGINX sites
+- eliminato wpms,
+- sostituito da:    base80, wpmultisite, myadmin, servicephp
+- eliminato wpm,
+- sostituito da:    test, iot
+
+
+
+
+================================================================================
+-----------------------------------  VERSIONE successiva a PHP Service - v0.00.1
+--------------------------------------------------------------------------------
+--------------------------  RIPRESE dal vecchio *** WP Service - v0.01.01  ***
+NOTE                                                                            2020-08-01
+
+- Questa versione deriva dallo sviluppo wp-multi fatto in precedenza
+- Adesso il 'WP Service' diviene un container di aiuto per la gestione 
+  del mariadb nella droplet v09
+- L'idea e' che il php agisca sul db per automatizzare operazioni di 
+  creazione e gestione del wp multi
+
+Il nome della app diviene:   PHP                                           <==  DA CAMBIARE !
+
+-------------
+- il nuovo wp multisite e' eseguito va sulla droplet gothings v01.03
+- nella droplet  gothings-v09 - db ci sono vecchi file, sembra provenienti da 
+  ~/NetBeansProjects/WP-Sviluppi/gothings/wpmulti-dev/wp-dev/ che ho salvato 
+  in ~/NetBeansProjects/WP-Sviluppi/gothings/wpmulti-dev/wp-dev/v09_backup
+  e cancellati dalla droplet
+
+==> Si sviluppa in:  ~/NetBeansProjects/WP-Sviluppi/gothings/wp/
+    si fanno ora le prove di installazione per la produzione                    2020-08-01
+
+---------------
+--------------------------------------------------------------------------------
+
+
+
+
+=====================================================================================================\
+                                                                                         PHP Service  |
+                                                                                    Sviluppo - START  |
+Pacchetti utili per il debug in una droplet:
+  apt -y update
+  apt -o Dpkg::Options::=--force-confdef -y install nano curl netcat net-tools telnet
+
+  altri paccetti utili:
+  make inetutils-ping dnsutils wget bzip2 locales perl unzip tree adduser
+
+------- prove di funzionamento iniziale
+curl nel container:
+  curl --verbose localhost
+
+curl da host di php:
+  curl --verbose localhost                <-- OK
+
+curl da 'fuori'
+  curl --verbose 'http://10.133.94.60'     <-- OK
+
+
+------------------------------------------------------- Richiesta di servizio PHP da gothings-v01-03
+------ PHP templates
+
+php-testata.php
+  <-- headers html per la risposta
+
+php-secure.php
+  <-- verifiche per decidere se si risponde
+  <-- per ora: SI FA FINTA!                                                                         DA FARE
+  <-- definizione dei valori per la risposta bash
+
+------------------------------------------------------------------------------ comandi curl di prova
+Prove:
+- si immette una URL da terminale o da browser
+    <-- su una droplet esterna rispetto al db
+    <-- Es.:  da 10.133.3.65    -->   a 10.133.94.60
+    <--      gothings-v01-03    -->     gothings-v09
+- il risultato e' una semplice pagina HTML, formattata per essere quasi leggibile sul terminale
+- si emette anche un exit code leggibile direttamente da bash script
+
+
+- prova base
+  da terminale:  curl --verbose 'http://10.133.94.60/template.php'
+    da browser:  http://php.gothings.org/template.php
+      <-- pagina html contenente: "Program NOT available"
+      <-- in sviluppo possono essere presenti alcune informazioni di debug
+
+Definizione parametri in template:
+  X_NAME       primo parametro di controllo, equivalente allo user da autenticare
+  X_CONTROL    secondo parametro di controllo, equivalente alla password nella autenticazione
+  X_VERIFY     terzo parametro di controllo per maggiore sicurezza
+  X_DEBUG      fa stampare una variabile potenzialmente utile nello sviluppo
+
+
+- prova di debug aggiungendo parametri nella URL
+      curl -v 'http://10.133.94.60/template.php?X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolo'
+      http://php.gothings.org/template.php?X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolo
+
+    <-- considera la prova di accesso valida per TUTTI
+  - gli stessi comandi di prima mostrano una pagina HTML piu' ricca
+      <-- exit code della chiamata: 0 se il template non lo modifica
+
+Attualmente, il test di autorizzazione e' inefficace, si accettano delle costanti:
+      X_NAME = test
+   X_CONTROL = password
+    X_VERIFY = <stringa qualunque>
+successivamenteil controllo sara' un hash 
+
+======> la discussione sul funzionamento di TEMPLATE e' avanti:              PHP TEMPLATE - START  |
+
+Nel fare showtables si vede che abbiamo bisogno di estensioni per lavorare con il db
+-----> si decide di far partire php con la stessa immagine di wordpress e, eventualmente
+       di estenderla ancora
+
+- tutorial utile:
+    https://www.sitepoint.com/how-to-manually-build-docker-containers-for-wordpress/
+      <-- come installare estensioni su docker PHP
+
+  curl -v 'http://10.133.94.60/showtables.php?DB_NAME=gtlite&X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolino&RES_DEBUG=1'
+  http://php.gothings.org/showtables.php?DB_NAME=gtlite&X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolino&RES_DEBUG=1
+
+                                                   ====> non funziona, MANCANO l'estensione mysql!!!
+soluzione: usiamo lo stesso php di wordpress
+
+in .../gothings/php/dockrepo/sysdata/php/gothingsphp.yml:
+  --> scegliamo l'immagine:   wordpress:5.3.2-php7.2
+               al posto di:   wordpress:5.3.2-php7.2-fpm-alpine
+                                                                                                    IN CORSO
+un ref. utile:  https://www.sitepoint.com/how-to-manually-build-docker-containers-for-wordpress/
+
+Altri ref con intenti simili:
+  https://github.com/10up/wp-local-docker
+  https://github.com/visiblevc/wordpress-starter
+    <-- vedi anche: letsencrypt, 
+
+- aggiunto un wp-config.php fittizio
+- trasfornato template.php in index.php
+- piccoli aggiustamenti cosmetici a index.php
+
+Accesso al sito php:
+  curl -v 'http://10.133.94.60/
+  http://php.gothings.org/
+
+
+---
+
+
+
+----------------__BUTTARE:
+curl -v -H 'TRY_X: true' 'http://10.133.94.60/testcurl.php'
+  <-- verifica collegamento base
+
+curl --verbose 'http://www.gothings.org/go_save_db.php'
+
+                                                                                     Sviluppo - FINE  |
+                                                                                     
+==================================================================================================
+=====================================================================================================\
+                                                                                         PHP Service  |
+                                                                                PHP TEMPLATE - START  |
+                                                                                                    IN CORSO
+Scopo del template e' fornire un punto di partenza per la realizzazione di servizi PHP
+- Vengono realizzate in maniera univoca tutte le funzioni comuni ad ogni applicazione
+- il template usa tre file php che vengono inclusi nell'applicazion template:
+    php-testata.php    <-- testata HTTP: title, start body, php functions declaration
+                           <-- contiene le funzioni PHP:
+                                 print_r2($val)   stampa 'carina' della variabile $val
+    php-secure.php     <-- controllo della chiamata, eventuale terminazione
+                           <-- eventualmente, TRY_X consente di bypassare i controlli
+                               durante lo sviluppo
+                           <-- assicurarsi che TRY_X sia 'false' in produzione
+                           <-- NON dovrebbe essere variato nelle varie applicazioni
+    php-content.php    <-- body del programma, specifico per ogni servizio
+                           <-- possibilmente, emettere uscita facilmente interpretabile
+                               da una chiamata da terminale 
+    php-footer.php     <-- terminazione del programma
+                           <-- print X_DEBUG ed esci dal programma
+                           <-- il valore di EXIT_CODE viene stampato sull'uscita
+                               ed e' disponibile come exit code a bash nel terminale
+
+Come usare i templates:
+- vai nel dir .../sysdata/php/var_www/html/
+- esegui una copia di template.php ed assegna un nome, es.: myservice.php
+  - edit il file myservice.php ed esegui la sostituzione:
+       require 'php-content.php';   ==>   require 'myservice-content.php';
+- esegui una copia di content.php ed assegna il nome: myservice-content.php
+  - modifica myservice-content.php per eseguire il servizio che credi
+- esegui le prove necessarie dal terminale e/o dal browser:
+      curl -v 'http://10.133.94.60/template.php?X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolino&RES_DEBUG=1'
+      http://php.gothings.org/template.php?X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolino&RES_DEBUG=1'
+  
+
+per myservice.php:  
+  curl -v 'http://10.133.94.60/myservice.php?X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolino&RES_DEBUG=1'
+  http://php.gothings.org/myservice.php?X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolino&RES_DEBUG=1'
+
+per creadb_bk.php:
+  curl -v 'http://10.133.94.60/creadb_bk.php?X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolino&RES_DEBUG=1'
+  http://php.gothings.org/creadb_bk.php?X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolino&RES_DEBUG=1
+
+
+                                                                                                    IN CORSO
+Facciamo showtables:
+  curl -v 'http://10.133.94.60/showtables.php?DB_NAME=gtlite&X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolino&RES_DEBUG=1'
+  http://php.gothings.org/showtables.php?DB_NAME=gtlite&X_NAME=test&X_CONTROL=password&X_DEBUG=TRUE&X_VERIFY=bibbolino&RES_DEBUG=1
+
+soluzione: usiamo lo stesso php di wordpress
+
+-----------------------------------------> aggiustata la configurazione php
+
+                                                                                 PHP TEMPLATE - FINE  |
+=====================================================================================================/
+
+
+=====================================================================================================\
+                                                                                         PHP Service  |
+                                                                             php db services - START  |
+
+-----------------------------------  Servizi creati per gestire il database wordpress da bash remoto
+
+- si aggiustano i programmi transitori  go_backup_db, go_creadb_bk e go_save_db
+
+------- servizio 'mostra tabelle'
+- si parte da template --> showtables
+- si aggiusta showtables-content.php
+
+
+
+
+                                                                                                    IN CORSO
+Facciamo showtables:
+  curl -v 'http://10.133.94.60/showtables.php?DB_NAME=gtlite&X_NAME=test&X_CONTROL=password&X_VERIFY=bibbolino&RES_DEBUG=1'
+  http://php.gothings.org/showtables.php?DB_NAME=gtlite&X_NAME=test&X_CONTROL=password&X_VERIFY=bibbolino&RES_DEBUG=1
+
+
+===> mysql da terminale ...
+      mysql -u root -pGTH2020_quattro_marzo
+      show databases;
+      select host, user from mysql.user;
+      mysql -u wpuser -ppenna_matita_gomma
+
+      select host, user, authentication_string from mysql.user;
+      select host, user from mysql.user;
+      CREATE USER 'wpuser'@'10.133.3.65' IDENTIFIED BY 'penna_matita_gomma';
+      CREATE USER 'wpuser'@'172.29.%';
+      CREATE USER 'root'@'172.29.%';
+      DROP USER 'wpuser'@'10.133.3.65';
+      GRANT ALL PRIVILEGES ON gtlite.* TO 'wpuser'@'10.133.%';
+      show grants for 'wpuser'@'10.133.%';
+
+ref.:
+  https://linuxconfig.org/install-mysql-on-ubuntu-18-04-bionic-beaver-linux
+    <-- come installare mysql client
+
+  installa -->
+      sudo apt update
+      sudo apt install mysql-client
+
+  test connection -->
+      mysql -u root -p -h 127.0.0.1           <-- p:  GTH2020_quattro_marzo
+      mysql -u wpuser -p -h 127.0.0.1         <-- p:  penna_matita_gomma
+      mysql -u wpuser -p -h 10.133.94.60      <-- p:  penna_matita_gomma
+      mysql -u root -p -h 10.133.94.60        <-- p:  GTH2020_quattro_marzo
+
+test da gothings-v01-03:                    <-- container nginx, diverso dall'host di db
+    mysql -u wpuser -p -h 10.133.94.60      <-- p:  penna_matita_gomma
+    mysql -u root -p -h 10.133.94.60        <-- p:  GTH2020_quattro_marzo
+=====>  FUNZIONA !!!
+
+test da gothings-v09:                       <-- container host di db
+    mysql -u wpuser -p -h 10.133.94.60      <-- p:  penna_matita_gomma
+    mysql -u root -p -h 10.133.94.60        <-- p:  GTH2020_quattro_marzo
+=====>  FUNZIONA !!!
+
+------------------------------------------------------------------------
+test dal container php:                     <-- stesso host di db
+    mysql -u wpuser -p -h 10.133.94.60      <-- p:  penna_matita_gomma
+    mysql -u root -p -h 10.133.94.60        <-- p:  GTH2020_quattro_marzo
+
+db WARNINGS:
+  [Warning] 'user' entry 'wpuser@*' ignored in --skip-name-resolve mode.
+  [Warning] 'proxies_priv' entry '@% root@df59d3319c66' ignored in --skip-name-resolve mode.  
+    --> https://www.fromdual.com/node/1280
+
+mysql andrebbe installato
+    apt update
+    apt install mysql-client
+    --> E: Package 'mysql-client' has no installation candidate
+
+altra strada:
+  installiamo un altro container:
+
+                                                                                                    IN CORSO
+Ricognizione: facciamo un container ubuntu con nodejs e tutto ilresto
+  --> ricerca:  docker nodejs over ubuntu 
+                                                                                  php db services - FINE  |
+                                                                                  
+=================================================================================================
+=====================================================================================================\
+                                                                                         PHP Service  |
+                                                                           Funzione CLEAR DB - start  |
+                                                                                      WP Service old
+
+*** funzione specifica per wordpress ***
+  wpclear.sh
+Ogni applicazione avra' una <appname>clear.sh, richiamata dall'applicativo principale
+****************************************
+
+-------- funzione CLEAR
+obiettivo:
+  tornare alla situazione iniziale nei dir e nel database
+
+realizzazione:
+  - si esegue una copia del db gtlite su gtlite_bk
+  - si eliminano TUTTI i file generati da wordpress
+      <-- files di nome wp-*
+      <-- altri files: index.php, license.txt, xmlrpc.php, readme.html, .htaccess
+      <-- dirs: wp-admin, wp-includes, wp-content
+  - si eliminano TUTTE le tabelle wordpress in gtlite
+  - si rileggono i file di configurazione wpinit.json e wpinstall.json da github
+      <-- per il momento NON si legge wpexpand.json per non usare wpdirs.tar.gz
+          in fase di sviluppo
+
+Problema:
+  dare ALL GRANTS a wpuser sul db gtlite_bk        <--    fare in verifyinit ??                     DA FARE
+
+
+----------------------------------------------------------------------------------------------------
+
+ref. usati:
+  https://www.supportsages.com/php-script-to-change-mysql-table-prefix/
+    <-- script MOLTO interessante
+    <-- HTML per leggere le pwd etc.         <-- usare .env ? 
+
+  https://www.matteomattei.com/how-to-clone-mysql-database-schema-in-php/
+    <-- usata versione cli come template 
+    <--  (thanks to Richard Maurer)
+
+  https://www.matteomattei.com/how-to-backup-mysql-data-and-schema-in-php/
+    <-- questo NON HA FUNZIONATO
+
+  https://stackoverflow.com/questions/50649207/how-to-copy-all-the-tables-from-one-database-to-another-database-using-php
+    <-- myscli version per copytables
+    <-- anche questo SEMBRA NON FUNZIONARE
+
+
+altri ref.:
+--------------  RENAME  DUMP  database
+ref.:
+  https://phoenixnap.com/kb/how-to-rename-a-mysql-database
+    <-- rename database
+    <-- dump database
+  https://phoenixnap.com/kb/how-to-rename-a-mysql-database
+    <-- altro script, in bash
+  https://stackoverflow.com/questions/12190000/rename-mysql-database
+    <-- alcuni suggerimenti utili ...
+
+automysqlbackup
+  https://sourceforge.net/projects/automysqlbackup/files/latest/download
+    <-- Automatic MySQL Backup
+    <-- bash script da vedere: backup schedulato ...
+  http://www.ducea.com/2006/05/27/backup-your-mysql-databases-automatically-with-automysqlbackup/
+    <-- tutorial
+
+use PHP to alter the db ref.:
+  https://www.supportsages.com/php-script-to-change-mysql-table-prefix/
+    <-- script MOLTO interessante
+    <-- HTML per leggere le pwd etc.         <-- usare .env ? 
+
+  https://stackoverflow.com/questions/50649207/how-to-copy-all-the-tables-from-one-database-to-another-database-using-php
+    <--mysqlcli version for 'copytables'
+
+  https://helloacm.com/duplicate-a-mysql-table-copy-table-duplicate-database-php-script/
+    <--  insert --> select  
+
+-----
+  http://www.learningaboutelectronics.com/Articles/How-to-rename-a-MySQL-table-using-PHP.php
+    <-- PHP script
+  https://gist.github.com/yireo/5919293
+    <-- gist ~~= al php visto sopra
+
+  https://www.matteomattei.com/how-to-clone-mysql-database-schema-in-php/
+  https://www.matteomattei.com/how-to-backup-mysql-data-and-schema-in-php/
+    <-- sembra buono ...
+
+
+--------------  RENAME  DUMP  database
+ref.: https://phoenixnap.com/kb/how-to-rename-a-mysql-database
+        <-- rename database
+        <-- dump database
+
+  https://stackoverflow.com/questions/22199557/assign-an-existing-user-to-mysql-databases/22199886
+    <-- mysql query to grant privileges to user
+
+
+--------------------------------------------------------------------------- comandi utili:
+
+mysql -u root -pGTH2020_quattro_marzo
+
+10.133.94.60/gtlite_bk/  http://phpmyadmin.gothings.org/db_sql.php?db=gtlite_bk
+Your SQL query has been executed successfully.
+
+show grants for 'wpuser'@'10.133.%';
+
+GRANT USAGE ON *.* TO 'wpuser'@'10.133.%' IDENTIFI... 
+GRANT ALL PRIVILEGES ON `gtlite`.* TO 'wpuser'@'10... 
+GRANT ALL PRIVILEGES ON `gtlite_bk`.* TO 'wpuser'@... 
+
+-------------------------------------------------------------------------------------------
+
+                                                                                      WP Service old
+                                                                            Funzione CLEAR DB - fine  |
+==================================================================================================
+                                                                                       DA RIGUARDARE
+=====================================================================================================\
+                                                                                         PHP Service  |
+                                                                                           Utilities  |
+Pacchetti utili per il debug in una droplet:
+  apt -y update
+  apt -o Dpkg::Options::=--force-confdef -y install nano curl netcat net-tools telnet
+
+  altri paccetti utili:
+  make inetutils-ping dnsutils wget bzip2 locales perl unzip tree adduser
+
+curl nel container:
+  curl --verbose localhost
+
+curl da host di php:
+  curl --verbose localhost                <-- OK
+
+curl da 'fuori'
+  curl --verbose 'http://10.133.94.60'     <-- OK
+
+------------------------------------------------------- Richiesta di servizio PHP da gothings-v01-03
+
+                                                                                                    IN CORSO
+curl --verbose 'http://10.133.94.60/template.php'
+
+curl -v -H 'x-ash: bla' -H 'x-num: blu' 'http://10.133.94.60/testcurl.php'
+  <-- inserzione di custom header
+
+                                                                                     Utilities -FINE  |
+=====================================================================================================/
+-----------------------------------------------------------------------------------------------------/ 2020-09-28
+                                                                             *** WP Multisite 05 ***/-------------
+---------------------------------------------------------------------------------------------------/
+                                                                           *** WPMulti v0.01.05 ***
+evoluzione di WPMulti v0.01.03
+  installazione di wordpress, versione multisite
+  strategia di bootstrap in:    GOTHINGS cloud v04     strategia di bootstrap
+  conf nginx:  wpm
+- il wp multisite WPM e' eseguito sulla droplet gothings v01.03
+  --> usa il db nella droplet  gothings-v09
+- ancora da aggiustare:
+      gocloud-wpm
+      wpmdirs.tar.gz
+
+-------------------------- sezioni:
+
+      FUTURO da fare  |  <-- Idee interessanti da fare in futuro
+
+          Dati UTILI  |  <-- informazioni di base, configurazione & copyright
+        Ref tecniche  |  <-- Riferimenti tecnici utili per wordpress
+      Prog Utilities  |  <-- Utility for programming & debug
+          shortcodes  |  <-- how to use shortcode, our custom shortcodes
+             Plugins  |  <-- commenti sui plugin usati
+            DROPLETS  |  <-- cloud resources
+
+           NGINX APP  |  <-- installazione app versione 3 - caso nginx
+
+  expand & creazione  |           <-- note alla seconda installazione (questa e' la terza)
+         Fase EXPAND  |                  <-- da completare
+           Fase INIT  |                    <-- da rifare ex-novo & documentare a futura memoria
+WP multisite install  |  <-- 1.o ~quasi~ funzionamento
+   WP secure install  |  <-- usa certbot by letsencrypt                         OK
+                      |      rinnovo automatico del certificato                 DA FARE
+       Page Builders  |  <-- scelta del costruttore di pagine
+
+       Mailgun EMAIL  |  <-- transactions email per l'amministratore            OK - DA ESPANDERE
+     User management  |  <-- profile login, dashboard
+      Users & Things  |  <-- collegamento tra UTENTI & COSE                     IN CORSO   <-
+ FP Plugins & Themes  |  <-- sviluppi WP X GoThings                             IN CORSO
+           WP Things  |  <-- memorizzazione delle COSE in wordpress             IN CORSO
+    DB custom tables  |  <-- usare custom MySQL table per i dati delle COSE
+         WP WebHooks  |  <-- interazione con wordpress                          IN CORSO
+           FP-WP-API  |  <-- collegamento da COSE a wordpress                   DA FARE
+wordpress javascript  |  <-- js nelle pagine wordpress                          IN CORSO
+
+ Custom Fields - ACF  |  <-- usa custom fields per i dati delle cose            DA VEDERE
+     acf on frontend  |  <-- search & show custon fields on frontend            ??
+  CF7 - Contact Form  |  <-- form per interazioni con l'utente (DA FINIRE)
+      Huginn - IFTTT  |  <-- private IFTTT
+           WOOThings  |  <-- da WOOCommerce a 'Personal Thing'
+    Roba DA GUARDARE  |  <-- references da rivedere in futuro
+
+--------------------------------------------------------------------------------
+---- Eliminati - ora in STORIA
+            Use PODS  |  <-- ABBANDONATO                                        KO
+
+===========================================================================================
+
+
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\\\
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+====================================================================================================
+====================================================================================================
+=================================================================================================\\\
+-------------------------------  .../WP-Sviluppi/siti/README.siti
+
+*** DA VEDERE ***
+                    per i siti storici sulle varie droplet & VPS
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\\\
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+====================================================================================================
+====================================================================================================
+=================================================================================================\\\
+-------------------------------  .../cfgroup/README.cf-dock_hlite
+
+*** DA VEDERE ***
+    <--
+    
+
+
+****************************************************************************************************
+                                                                                  ARCHITETTURA HLITE
+
+
+Cosa e' il cloud hlite
+  Il cloud hlite e' un insieme di macchine virtuali, gestite da FPvmatic, che girano su server
+  sicuri ospitati da providers internazionali.
+  Il cloud e' privato nel senso che l'accesso ai server e' regolato da FPvmatic. Esiste una
+  parte pubblica, prevalentemente dedicata alla documentazione, ma la maggior parte
+  delle funzionalita' e regolata da password ed e' trasmessa su internet in forma criptata.
+
+Cosa fa hlite
+  hlite connette al cloud un numero praticamentte illimitato di "macchine clienti", rendendo
+  possibile e sicura la loro connessione tramite internet e la rete mobile.
+  Le macchine clienti in hlite sono chiamate GATEWAY.
+
+Cosa puo' fare un gateway hlite
+  Il gateway hlite puo' connettere un numero praticamente illimitato di sotto-componenti LAN
+  ovvero di oggetti capaci di comunicare tramite la rete locale con il gateway stesso.
+  Il gateway 
+
+
+Scopo del cloud hlite
+  Il cloud hlite comprende ed integra servizi centrali
+  
+
+Esempi di applicazione
+
+HLITE e' adesso "Free Use"
+
+Come si usa hlite
+
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\\\
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+====================================================================================================
+====================================================================================================
+=================================================================================================\\\
+-------------------------------  .../cfgroup/hlite.rpi/README.hlite.rpi
+
+- primo tentativo di applicazione generica su raspi: js / vue.js
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\\\
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+====================================================================================================
+====================================================================================================
+=================================================================================================\\\
+-------------------------------  .../raspi-apps/README.raspi.apps
+
+<-- tentativo raspi #2 di generalizzazione
+      <-- suddivisione base + ....
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\\\
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+====================================================================================================
+====================================================================================================
+=================================================================================================\\\
+-------------------------------  .../raspi-apps/REDAME.hlite.19
+
+<-- tentativo vue.js
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\\\
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+====================================================================================================
+====================================================================================================
+=================================================================================================\\\
+-------------------------------  .../...?
+
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\\\
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+====================================================================================================
+====================================================================================================
+=================================================================================================\\\
+-------------------------------  .../...?
+
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\\\
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+====================================================================================================
+====================================================================================================
+=================================================================================================\\\
+-------------------------------  .../...?
+
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+****************************************************************************************************
+
+
+
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------- 2018-08-18
+                                                                            *** WP-Multi RESTART ***/----------
+---------------------------------------------------------------------------------------------------/
+                                                         *** restyling del vecchio wp-multisite ***
+
+Note vecchie interessanti:
+
+
+
+
+                                                         *** restyling del vecchio wp-multisite ***
+---------------------------------------------------------------------------------------------------\
+                                                                            *** WP-Multi RESTART ***\----------
+---------------------------------------------------------------------------------------------------- \  FINE
+---------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------- 2018-08-18
+                                                                                   *** STRATEGIA ***/----------
+---------------------------------------------------------------------------------------------------/
+                                               *** sottotitolo diverso per ogni versione storica ***
+
+
+
+
+                                               *** sottotitolo diverso per ogni versione storica ***
+---------------------------------------------------------------------------------------------------\
+                                                                                   *** STRATEGIA ***\----------
+---------------------------------------------------------------------------------------------------- \  FINE
+---------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------/ 2018-08-19
+                                                *** Dettagli di un tema correlato alla strategia ***/-------------
+---------------------------------------------------------------------------------------------------/
+                                               *** sottotitolo diverso per ogni versione storica ***
+
+
+
+
+
+                                               *** sottotitolo diverso per ogni versione storica ***
+---------------------------------------------------------------------------------------------------\
+                                                *** Dettagli di un tema correlato alla strategia ***\-------------
+-----------------------------------------------------------------------------------------------------\    FINE
+------------------------------------------------------------------------------------------------------------------
+
+
+****************************************************************************************************
+                                                                                 CUT & PASTE library  -  INIT
+
+--- comandi o testi usati molto spesso  ---
+
+
+                                                                                 cut & paste library  -  END
+****************************************************************************************************
+
+
+
+
+
+====================================================================================================
+====================================================================================================  ROBACCIA
+====================================================================================================
+??????????????????????  DA QUI IN POI AGGIUSTARE O ELIMINARE !!!  ???????????????                >>> INIZIO
+
+
+
+
+
+
+
+
+
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+---------------------------------------------------------------------------------------------------- 2019-11-29
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\------>>>>  INIZIO
+                                                             *** lavoro precedente, su raspberry ***
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  lavoro precedente, su raspberry  @@@
+Riportato qui, per convenienza e per rapida consultazione
+
+Vedi file:
+
+/home/superman/NetBeansProjects/github-gothings/README.github.gothings
+
+------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------/ 2018-08-17
+                                                                            *** GoThings install ***/-------------
+---------------------------------------------------------------------------------------------------/
+                                                               *** 1.a stesura GoThings-install ***
+
+
+Si parte da :    gothings-f01-2019-10-29-4GB.img
+
+  . 0                                                <-- exec bootstrap per aggiornare g
+           3. GO      download GOTHINGS control menu            step 3 del menu 0
+   <== NON FUNZIONA !!!  <-- manca jq
+
+  sudo apt install jq           <-- installare jq
+                                <-- ci mette un po'  (si ferma molto su 81%...)
+  ./g                           <-- esegue fase "expand"
+                                <-- esegue baseinstall.sh
+                                <-- scarica l'immagine gothings/nodebase:arm-004
+                       ... in INSTALL:   mettere 'INSTALL' al posto di 'Start GoThings BASE'        DA FARE
+                       ... VANNO DEFINITI i network 'external'                                      DA FARE
+  ==> networks definiti a mano ...
+                       ... togliere il 'pause' alla fine della fase INSTALL                         DA FARE alla fine
+... si riparte con install (re-init baseinstall.sh)
+... non e' chiaro se i node_modules ci sono:    <-- NON CI SONO  <-- l'install NON HA FUNZIONATO !!!
+      --> fallisce in base@0.0.1 init: `./initbase.sh` -->  npm ERR! Exit status 126
+
+
+
+
+STOP example containers:
+    docker-compose -f /home/pi/dockrepo/dockimages/app-testvue.yml down
+
+DA FARE:    mettere il link a controlmenu in sezione 6
+
+
+DA FARE:   .gitignore
+              <-- forse NON SERVE se non si fa upload con git 
+
+DA FARE:    Mettere "controllo MD5" ?         <-- DA RIVEDERE alla fine
+
+DA FARE:    fare il rebbot automatico alla fine del passo 1
+
+
+
+                                                               *** 1.a stesura GoThings-install ***
+---------------------------------------------------------------------------------------------------\
+                                                                            *** GoThings install ***\-------------
+-----------------------------------------------------------------------------------------------------\    FINE
+------------------------------------------------------------------------------------------------------------------
+
+
+
+------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------/ 2019-11-06
+                                                                  *** G O T H I N G S   Lifecycle***/-------------
+---------------------------------------------------------------------------------------------------/
+                                                                 *** Ciclo di vita applicazioni ***
+NOTA:  (^n)  con n= 1, 2, ...  indica la nota n.esima
+
+
+1.- Immagine docker   ------------------------------------------------------------------------------
+L'immagine usata per costruire l'applicazione e' generata con un procedimento parallelo
+a gothings
+In altre parole nei menu' gothings l'immagine e' considerata pre-esistente e scaricabile
+da docker hub
+--> Il menu' di installazione per lo sviluppatore primario e' separato da tutto il resto
+      <-- lo chiameremo gdev
+
+
+2.- Init data   ------------------------------------------------------------------------------------
+  I dati del contenitore  sono mantenuti in un host-volume, per garantire la persistenza
+su un dato host a prescindere dal ciclo di vita dei contenitori (^1).
+  In gothings i dati per il particolare contenitore sono mantenuti nel dir(^2):
+    /home/pi/dockrepo/sysdata/<nome contenitore>
+e questo viene mappato su un dir interno del contenitore che gira l'applicazione.
+  Per esempio, se una applicazione nodejs gira nel dir /usr/app/ del contenitore
+di nome nodeapp, i suoi sorgenti saranno in:
+    /home/pi/dockrepo/sysdata/nodeapp
+e nel file .yml del docker-compose verra' definito il docker host volume:
+    volumes:
+      - /home/pi/dockrepo/sysdata/nodeapp/:/usr/app/
+Da osservare che  un contenitore potra' comunque usare database esterni o altri
+volumi docker, secondo le definizioni dello sviluppatore.
+L'inizializzazione del volume avviene per espansione di un archivio .tar.gz
+La prima stesura dell'archivio .tar.gz e' realizzata tramite gdev
+L'archivio viene espanso sul volume host. L'espansione mantiene ownership &
+permissions.
+
+
+3.- Start application   ----------------------------------------------------------------------------
+  Richiama un compose.yml per lo start dell'applicazione. Se l'applicazione e'
+gia' attiva non si hanno effetti.
+
+
+4.- Stop application   -----------------------------------------------------------------------------
+  Richiama un compose.yml per lo stop dell'applicazione. Il contenitore diviene
+inattivo ed il suo stato e' marcato "exithed".
+
+
+5.- Destroy application   --------------------------------------------------------------------------
+  Richiama un compose.yml che ferma l'applicazione e distrugge il contenitore,
+che non e' piu' recurabile nel sistema. I dati rimangono nel volume ed un
+successivo start dovrebbe ripartire senza alterazione dei dati.
+
+
+
+NOTE -----------------------------------------------------------------------------------------------
+(^1): I dati invarianti per tutta la vita dell'applicazione saranno memorizzati
+      nell'immagine
+(^2): /home/pi/ e', nella raspberry, l'utente che gira gothings
+
+
+----------------------------------------------------------------------------------------------------
+La fase '1.- Immagine docker' e' realizzata nel menu gdev per tutte le applicazioni
+della parte BASE
+
+Per la fase '2.- Init data' :
+  - per la parte BASE viene eseguita automaticamente allo start di ./g (vedi ginit)
+  - per le altre app viene eseguita al primo richiamo della corrispondente voce di menu'
+                                                                  <--  da fare
+
+
+
+------------------------------------------------------------------------------------ IMPLEMENTAZIONE
+Si definisce un file '<application>.json'
+
+Nel file ci staranno informazioni varie per il display dell'applicazione durante il management
+  <-- per esempio: nome, versione, autore, ???
+      <-- questa parte sara' espamsa in seguito, per ora, SOLO il minimo indispensabile
+Nel file viene definito il ciclo di vita dell'applicazione:
+  <-- per esempio:
+      - cerca un archivio .tar.gz per inizializzare il volume dati in .../sysdata/<application>/...
+      - esegui uno script per l'installazione iniziale ...
+      - esegui uno script per lo start dell'applicazione ...
+      - etc. per tutte le fasi del ciclo di vita dell'applicazione ...
+Ogni azione definita sopra ha un proprio ciclo di vita
+  <-- ad es.: l'installazione e' un pre-requisito, da fare subito appena vista ..
+
+vediamo come si puo' fare ...
+    {
+      "package": "base",                        definizioni varie, utili, ma NON operative
+      "version": "0.1.0",
+      "description": "BASE subsystem",
+      "author": "vmaticFP",
+      "actions": {                              definizione del ciclo di vita dell'applicazione
+        "expand": {                               lettura volume dati
+            "type": "once"                          da fare una sola volta
+          "status": "todo"                          diviene "done" quando fatto
+          "script": "./getbase.sh"                  script che esegue la lettura & l'espansione del .tar.gz
+        }
+        "install": {                              installazione del contenitore (ad es.: npm install ....)
+             "type": "once"
+           "status": "todo"
+           "script": "./installbase.sh"
+        }
+        "start" : {                               comando per il control menu
+            "type": "control"
+          "status": "ready"
+          "script": "./startbase.sh"
+        }
+        "pause" : {
+            "type": "control"
+          "status": "ready"
+          "script": "./stopbase.sh"
+        }
+        "destroy" : {
+              "type": "control"
+            "status": "ready"
+            "script": "./basedown.sh"
+        }
+      }
+    }
+
+Si definiscono le transizioni:
+
+todo -->  ready
+  ==> se todo, esegui e vai in done
+      se done, no-operation
+
+ready --> ready
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@====>  NO!  : semplificare:
+
+--------- 2.a strada
+1.- l'utente mette baseexpand.json & baseexpand.sh in .../dockimages/base
+    - eventualmente, l'utente mette anche il .tar.gz in .../dockimages/base
+2.- il .json contiene i nomi di tutto
+3.- ginit verifica baseexpand.json per vedere se l'espansione e' da fare,
+    ovvero se e' gia' fatta o non e' comunque necessaria:
+    - NO:
+        <-- si fa l'espansione, prendendo i parametri dal .json
+          <-- eventualmente si scarica il .tar.gz dall'indirizzo fornito
+        <-- espansione OK?
+          - SI:
+              <-- abbiamo finito l'expand, ritorna OK
+          -NO:
+              <-- abbiamo finito l'expand, ritorna ERR 1
+    - SI:
+        <-- abbiamo finito l'expand OK, ritorna 0
+  - ginit: ERRORI?
+    - SI:
+        <-- ritorna l'errore
+    - NO:
+        <-- ritorna 0
+
+------------------------ svolgimento parte jq:
+baseexpand.json:
+{
+  "package": "base",
+  "status": "todo",
+  "filetargz": "dockrepo/dockimages/base/basedir.tar.gz",
+  "githubgzfile": "https://raw.githubusercontent.com/fpirri/gothings-base/master/dockrepo/sysarchive/basedir.tar.gz",
+  "script": "dockrepo/dockimages/base/expandbase.sh"
+}
+---- DOPO MOLTI TENTATIVI:
+comando jq:
+BLA=($(cat baseexpand.json | jq -r '.status,.filetargz,.githubgzfile,.script | @sh'))
+
+Lunghezza dell'array BLA:
+pi@raspberrypi:~/dockrepo/dockimages/base $ echo ${#BLA[@]}
+4
+Vedi l'elemento [1]:
+pi@raspberrypi:~/dockrepo/dockimages/base $ echo ${BLA[1]}
+'dockrepo/dockimages/base/basedir.tar.gz'
+
+   <===== OK, il template e' giusto!
+
+--------  OSSERVAZIONI --
+"package": "base"
+  - per ora il nome non e' usato
+    <-- sara' aggiustato in seguito, nella costruzione di un 'verifyexpand' generalizzato
+
+"status": "todo"
+  - si ammettono due soli valori: 'todo' & 'done'
+  - al momento non sono previste variazioni
+
+"filetargz": "dockrepo/dockimages/base/basedir.tar.gz"
+  - DEVE essere un .tar.gz
+    <-- al momento non c'e' controllo immediato
+        <-- si fa controllo solo sul risultato della chiamata di espansione ...
+  - viene prefisso con $HOMEDIR === "/home/pi/"
+    <-- il contenuto DEVE partire da ./dockrepo
+        <-- questo controllo NON C'E'
+
+"githubgzfile": "https://raw.githubusercontent.com/fpirri/gothings-base/master/dockrepo/sysarchive/basedir.tar.gz"
+  - DEVE essere raggiungibile dalla funzione wget
+  - si controlla che il risultato porti effettivamente un file
+
+"script": "dockrepo/dockimages/base/expandbase.sh"
+  - NON USATO nella fase di expand
+    <-- sara' usato in seguito
+
+
+-------------------- CONTROLLI esistenti sul .json                                            ERRORI
+ERROR 1
+  invalid values in JSON
+  si controllano i valori inaccettabili: null, true, false, ""
+
+ERROR 2
+  empty strings in JSON
+
+ERROR 3
+  status non valido, i valori accettati sono [todo, done]
+
+ERROR 4
+  install script not found
+
+ERROR 5
+  cannot update JSON file
+
+ERROR 66
+  archivio .tar.gz introvabile
+  espansione archivio .tar.gz fallita, causa stampata in debuglog
+
+
+
+-----------------------------------  Sostituzione valore con jq
+lettura:
+  echo "$(cat baseexpand.json | jq -r '.status')"
+
+scrittura:
+  echo "$(cat baseexpand.json | jq -r '.status |= "done"')" > newbaseexpand.json
+  
+
+jq '(..|select(type=="boolean")) |= if . then 1 else 0 end'
+
+jq 
+
+
+?? -----------------------------------
+installbase.sh
+  <-- inizializzare il volume dati
+  <-- fare eventuale espansione 
+
+
+
+
+                                                                 *** Ciclo di vita applicazioni ***
+---------------------------------------------------------------------------------------------------\
+                                                                  *** G O T H I N G S   Lifecycle***\-------------
+-----------------------------------------------------------------------------------------------------\    FINE
+------------------------------------------------------------------------------------------------------------------
+
+
+
+                                                             *** lavoro precedente, su raspberry ***
+////////////////////////////////////////////////////////////////////////////////////////////////////------>>>>   FINE
+----------------------------------------------------------------------------------------------------
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

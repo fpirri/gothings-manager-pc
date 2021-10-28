@@ -1,0 +1,747 @@
+
+****************************************************************************************************
+                                                                                   Roba DA RICORDARE
+****************************************************************************************************
+Questa doc:
+  .../github-gothings/gothings-scratchpad/README.DaRicordare
+---------------------------------------------------------------------------------------------------- 2021-10-01
+
+Scopo: 
+  - mini progetti utili, riuniti qui
+
+Note:
+  --> ??
+
+
+****************************************************************************************************
+
+****************************************************************************************************
+
+----------------------------------------------------------------------------------------------------
+                                                                                       History Index
+               per la storia precedente, cerca:     *** STORIA ***
+                               lavoro iniziale:     *** Bash ***
+
+                         Progetti Interessanti:     *** Progetti Futuri ***
+                          Progetto localserver:     Progetto localserver  |
+
+                                 Script server:     interfaccia web-bash  |
+
+                       --- altri elementi storici significativi ---
+
+                  Per cut & paste interessanti:     CUT & PASTE library  -  INIT
+
+last commit:
+       scratchpad : commit olivetin - 0.01 - 03
+      localserver : primo commit - 0.01 - 02
+
+
+****************************************************************************************************
+
+----------------------------------------------------------------------------------------------------
+                                                                                      Internal Index
+Direct jump to interesting points:      <-- search for the below terms
+
+*** STRATEGIA ***
+    ... sottopunto ...
+        ... altro sottopunto ...
+
+
+
+****************************************************************************************************
+
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------- 2018-08-18
+                                                                                      *** SYSTEM ***/----------
+---------------------------------------------------------------------------------------------------/
+                                                                           *** doc interessante ***
+
+
+=====================================================================================================\
+                                                                           certbot renew certificate  |
+
+-------- renew letsencrypt certificate
+eseguire:
+.../WP-Sviluppi/gothings/base/dockrepo/sysdata/certbot/go-letsencrypt
+  --> RICORDA:  eseguire il -s reload su nginx !!!  (prima: nginx -t)
+        <-- in realta' NON dipendeva da firefox ! ...
+
+
+
+IP address:
+      ssh yesfi@104.248.95.29           gothings-v09
+      ssh yesfi@188.166.70.203          
+
+                                                                           certbot renew certificate  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                                interfaccia web-bash  |
+
+Vedi anche vecchia versione in STORIA
+
+
+Ref.: https://github.com/bugy/script-server
+
+Doc da vedere:
+https://hub.docker.com/r/bugy/script-server
+  <-- docker version
+https://pythonrepo.com/repo/bugy-script-server-python-miscellaneous
+  <-- introduzione allo script server
+
+Possibile problema:
+  GoThings usa docker, come si chiama docker da uno script bash a sua volta
+  chiamato da un server python che eventualmente e' in un contenitore?
+Possibile soluzione:
+  chiama docker da python:
+    https://www.docker.com/blog/guest-post-calling-the-docker-cli-from-python-with-python-on-whales/
+Altre possibili soluzioni:
+    https://stackoverflow.com/questions/32163955/how-to-run-shell-script-on-host-from-docker-container
+    https://stackoverflow.com/questions/31720935/execute-host-commands-from-within-a-docker-container
+
+
+    https://sites.google.com/site/easybashweb/home?authuser=0
+
+Nuova ricerca:   web bash gui   -->
+  https://www.olivetin.app/
+    <-- l'esempio sembra fatto apposta !
+  --> investigare piu' in dettaglio ...
+
+
+
+=====================
+--------------- ipotesi di sviluppo futuro
+--- interazione con raspi-base
+- pagina di accesso su raspi
+  - server http che esegue comandi locali
+    ?-> aprire shell di controllo sul proprio PC
+    ?-> futuro 'http control panel'
+- Pagina WP con raspi-key (da current-user)
+- un iframe che chiama la pagina di accesso
+
+
+------- iframe refs:
+https://www.dyn-web.com/tutorials/iframes/postmessage/
+  <-- tutorial js cross-origin
+https://www.dyn-web.com/tutorials/iframes/refs/parent.php
+  <-- tutorial js same-origin
+
+https://www.templatemonster.com/blog/best-wordpress-iframe-plugins/
+
+
+
+
+                                                                                interfaccia web-bash  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                          droplet IP Address & notes  |
+IP address:
+      ssh yesfi@104.248.95.29           gothings-v09
+      ssh yesfi@188.166.70.203          
+
+
+refs.:
+  .../gothings-app-servicewp-aux/README.gothings-app-servicewp-aux
+    <-- cerca:     gothings-v09  |
+
+  .../gothings/gothings-app-servicewp-aux/dockrepo/sysdata/multisite-v01-03/gocloud-base-v01-03
+    <-- cerca:     expand & creazione  |
+
+                                                                          droplet IP Address & notes  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                                             Windows  |
+                                                                         porting gothings to windows  |
+Potrebbe essere ultile portare gothings sotto windows:
+  WSL 2 is the second iteration of the Windows Subsystem for Linux
+    <-- sembra una specie di contenitore per girare linux dentro windows
+    <-- da verificare se e' compatibile con docker per windows ...
+
+
+                                                                         porting gothings to windows  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                                        buco memoria  |
+                                                                                             memoria  |
+
+cerca:    ubuntu checking memory usage  -->
+  https://phoenixnap.com/kb/linux-commands-check-memory-usage
+    <-- 5 strade ..
+  https://askubuntu.com/questions/9642/how-can-i-monitor-the-memory-usage
+    <-- vedere bashtop  (e la versione python ...)
+    ==> vedi:  https://github.com/aristocratos/bpytop
+
+
+                                                                                        memoria fine  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                                            markdown  |
+                                                                                              viewer  |
+Apparentemente FUNZIONANTI:
+Marktext
+  https://github.com/marktext/marktext
+    <-- eventualmente: installare con flatpack
+    <-- eseguibile da lanciare
+        seguite istruzioni:  versione da terminale OK
+    - per integrare con la GUI:
+        https://github.com/TheAssassin/AppImageLauncher
+          <-- DA FARE
+    - FUNZIONA:  editing 'in loco', vero WYSIWYG |
+        <-- per i link ci vuole un browser
+
+
+IN PROVA ORA:
+
+
+
+DA PROVARE:
+  http://dynalon.github.io/mdwiki/#!index.md
+    <-- provare SUBITO su localhost ...
+
+  http://strapdownjs.com/
+    <-- si include il file .md in un template ...
+      <-- automatizzare con nginx & dockerizzare ?
+  https://stackedit.io/
+    <-- editor online, sembra buono ..    <-- DA PROVARE
+
+
+==============  PROVE insoddisfacenti ...
+Markdown-Live-Preview
+  https://markdownlivepreview.com/
+    <-- non e' chiaro come si fa ...
+  https://github.com/ms-jpq/markdown-live-preview
+    <-- applicativo da installare ...
+        - bisogna installare bene python3, pipenv ed altro ...
+            https://docs.python-guide.org/dev/virtualenvs/#virtualenvironments-ref
+              <-- doc DA STUDIARE  ... quando trovero' il tempo ...
+            https://servicedesk.mtu.edu/TDClient/1801/Portal/KB/ArticleDet?ID=66715
+              <-- forse anche questo e' da guardare ...
+    - installato dopo molte peripezie (passaggio a python 3 ...)
+    ORA DA PROVARE ...
+      <==== NON sono riuscito a farlo funzionare ...
+  DISINSTALLATO !!!
+ReText  da Ubuntu software
+  ERRORE::  il live preview NON FUNZIONA !!!
+    <-- DA RICERCARE una soluzione
+
+
+
+                                                                                         viewer fine  |
+=====================================================================================================/
+
+
+=====================================================================================================\
+                                                                                                bash  |
+                                                                                          operazioni  |
+
+https://stackoverflow.com/questions/6348902/how-can-i-add-numbers-in-a-bash-script
+somma:
+    num=$((num1 + num2))
+    num=$(($num1 + $num2))       # Also works
+    num=$((num1 + 2 + 3))        # ...
+    num=$[num1+num2]             # Old, deprecated arithmetic expression syntax
+
+Assign output to variable
+  Var=$(command)
+
+WHILE loop
+while [ condition ]
+do
+   command1
+   command2
+   command3
+done
+
+---- num condition
+a=2462620
+b=2462620
+
+if [ "$a" -eq "$b" ]; then
+  echo "They're equal";
+fi
+------
+operators:
+-eq # Equal                -ne # Not equal      -lt # Less than
+-le # Less than or equal   -gt # Greater than   -ge # Greater than or equal
+
+
+Directory does not exists:
+  if [ ! -d "/dir1/" ]; then
+    <dir does not exists>
+  fi
+
+                                                                                     operazioni fine  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                                                bash  |
+                                                                                      manage scripts  |
+Esci ed esegui un altro script
+Sostituisci lo script attuale (equivalente a esci+esegui
+  <-- chiama lo script con 'source <script>' oppure con '. <script>'
+  <-- esegui il cd nello script e questo verra' cambiato ...
+
+
+                                                                                 manage scripts fine  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                                                bash  |
+                                                                                     utenti & gruppi  |
+Elenca gli utenti del gruppo docker:
+    getent group docker
+
+
+                                                                                utenti & gruppi fine  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                                                 apt  |
+Ricerca package disponibili:
+  apt-cache search 'package'
+  apt-cache search '' | sort -d | awk '{print $1}'
+<-- https://askubuntu.com/questions/786121/how-can-i-get-a-list-of-all-packages-available-for-a-specific-version-of-ubuntu
+
+
+                                                                                            apt fine  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                                              Docker  |
+                                                                                        docker varie  |
+docker logs -f --tail 100 nginx
+
+exit error code: https://betterprogramming.pub/understanding-docker-container-exit-codes-5ee79a1d58f6
+
+
+
+
+                                                                                   docker varie fine  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                                              GITHUB  |
+                                                                                        GITHUB varie  |
+CLONE github repo to netbeans
+- In github, create repository with readme, gitignore-node & mit license
+    <-- copy repository url
+- in Netbeans:
+  - From Netbeans Team menu click git --> clone
+  - Paste your URL as repository URL, provide your github user name and password
+  - Netbeans IDE will clone your repository and will ask to create a new application
+  - Crea l'applicazione come normalmente
+  - fai aggiunte/edit se credi
+  - Commit changes and push to the remote
+  - DONE. Check from github your changes and enjoy...
+
+
+
+                                                                                   GITHUB varie fine  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                                              system  |
+                                                                                               varie  |
+
+docker logs -f --tail 100 nginx
+
+tree -d -L 5 <dir>               solo dirs, 5 livelli
+
+spazio disco:
+  du -h --max-depth=1 /path/to/directory
+  du -hsc *                                          <-- spazio occupato nel dir
+
+
+getent group developers
+
+                                                                                          varie fine  |
+=====================================================================================================/
+
+
+
+
+                                                                           *** doc interessante ***
+---------------------------------------------------------------------------------------------------\
+                                                                                      *** SYSTEM ***\----------
+---------------------------------------------------------------------------------------------------- \  FINE
+---------------------------------------------------------------------------------------------------------------
+
+
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------- 2018-08-18
+                                                                             *** Progetti Futuri ***/----------
+---------------------------------------------------------------------------------------------------/
+                                                                                *** Progetti 01 ***
+
+
+
+=====================================================================================================\
+                                                                    Interfaccia raspi-GoThings Cloud  |
+
+vedi anche websocketd & seguenti in:   interfaccia web-bash  |
+
+
+
+                                                                    Interfaccia raspi-GoThings Cloud  |
+=====================================================================================================/
+
+
+
+=====================================================================================================\
+                                                                                Progetto localserver  |
+===> si chiamava:  Progetto localhost
+
+---------- NGINX come sito locale
+Docker container su NetBeansProject per vedere i file MD
+- progetto:   .../NetBeansProjects/github-gothings/gothings-localserver/
+- messi script start & stop sotto .../dockrepo
+- copiati i file del progetto da netbeans a ~/dockrepo
+    <-- porta: 1234
+
+=====> prova di esecuzione: NON FUNZIONA !!!
+
+google: "nginx serve md files"
+  <-- da vedere le ricerche alternative suggerite ...
+  http://strapdownjs.com/
+    <-- aggiungere header + footer.js
+
+----------------------------------------------
+vedere: 
+  http://dynalon.github.io/mdwiki/#!index.md
+    <-- vedere meglio!  sembrerebbe usabile!
+
+---------------- Versione aggiornata                                  2021-10-15
+
+---------- NGINX come sito locale
+Docker container vedere i file locali da browser
+- repository su github
+  - contiene solo i file operativi
+      <-- mettere tutto in un .tar.gz
+  - file di sviluppo su netbeans
+- utile per visualizzare i file MD locali & in sviluppo
+- probabilmente utile in GoThings per collaborare tra le COSE
+- progetto:   .../NetBeansProjects/github-gothings/gothings-localserver/
+- organizzazione dirs:
+    ~/create.gothings              script per inizializzare localmente
+                                   il sistema Gothings sul PC
+                                     <-- scarica il progetto da github
+                                         e chiama localserver-go
+    ~/dockrepo/                    dir base: comune a tutte le app GoThings
+      localserver-go               menu di gestione del localserver
+                                   fa qualche verifica di base
+                                     <-- NON usa dockimages etc.
+      <file operativi vari>        ci saranno file di tipo <AppName>-go
+                                      <-- per le varie applicazioni             DA FARE
+      .../sysdata/                 area per TUTTE le app
+        .../localserver/           area per il localserver
+          
+        
+
+- messi script start & stop sotto .../dockrepo
+- per ora create.gothings e' messo in $HOME
+- fatte prove di download da github di ~/localserverdirs.tar.gz
+- script make-localserver    <-- OK
+
+- copiati i file del progetto da netbeans a ~/dockrepo
+    <-- porta: 1234
+
+
+
+
+
+last commit:
+       localserver : version 0.04 - primi aggiustamenti - 09
+
+
+                                                                         Progetto localserver - fine  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                             Progetto localwordpress  |
+Un wordpress locale, da usare come accesso a GoThings
+- raggiungibile da un sito GoThings   (Things ?)
+  - menu protetto, attivo solo se il PC locale e' ON
+  - sicurezza a due livelli ...
+- compatibile con un DynDNS
+
+
+                                                                      Progetto localwordpress - fine  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                                  Progetto localgate  |
+Un sito locale per 'assiemare' le cose di casa in stile IDN
+
+                                                                           Progetto localgate - fine  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                                        Progetto IDN  |
+Un sito internet per realizzare un aggregatore di dati in stile IDN
+
+- collegare siti/API che forniscano i dati secondo IDN
+- usare HTTPS ed una forma di auth
+- aggregare con un campo <IDN>--dativari</IDN>
+
+- e' possibile usare websocket?
+
+                                                                                 Progetto IDN - fine  |
+=====================================================================================================/
+
+
+
+
+
+=====================================================================================================\
+                                                                                            Qualcosa  |
+
+                                                                                     Qualcosa - fine  |
+=====================================================================================================/
+
+
+                                                                                *** Progetti 01 ***
+---------------------------------------------------------------------------------------------------\
+                                                                             *** Progetti Futuri ***\----------
+---------------------------------------------------------------------------------------------------- \  FINE
+---------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+---------------------------------------------------------------------------------------------------------- 2021
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------- 2018-08-18
+                                                                                   *** STRATEGIA ***/----------
+---------------------------------------------------------------------------------------------------/
+                                               *** sottotitolo diverso per ogni versione storica ***
+
+
+
+
+=====================================================================================================\
+                                                                                            Qualcosa  |
+
+                                                                                       Qualcosa fine  |
+=====================================================================================================/
+
+
+
+
+                                               *** sottotitolo diverso per ogni versione storica ***
+---------------------------------------------------------------------------------------------------\
+                                                                                   *** STRATEGIA ***\----------
+---------------------------------------------------------------------------------------------------- \  FINE
+---------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------/ 2018-08-19
+                                                *** Dettagli di un tema correlato alla strategia ***/-------------
+---------------------------------------------------------------------------------------------------/
+                                               *** sottotitolo diverso per ogni versione storica ***
+
+
+
+
+
+                                               *** sottotitolo diverso per ogni versione storica ***
+---------------------------------------------------------------------------------------------------\
+                                                *** Dettagli di un tema correlato alla strategia ***\-------------
+-----------------------------------------------------------------------------------------------------\    FINE
+------------------------------------------------------------------------------------------------------------------
+
+
+****************************************************************************************************
+                                                                                 CUT & PASTE library  -  INIT
+
+--- comandi o testi usati molto spesso  ---
+
+
+                                                                                 cut & paste library  -  END
+****************************************************************************************************
+
+
+
+
+
+====================================================================================================
+====================================================================================================  ROBACCIA
+====================================================================================================
+??????????????????????  DA QUI IN POI AGGIUSTARE O ELIMINARE !!!  ???????????????                >>> INIZIO
+
+
+====================================================================================================
+====================================================================================================  ROBACCIA
+====================================================================================================
+                                                                                                 >>> FINE
+
+
+
+====================================================================================================
+===================================================================================   *** STORIA ***
+====================================================================================================
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+---------------------------------------------------------------------------------------------------- 2021-
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\------>>>>  INIZIO
+                                                                                         *** ??? ***
+
+
+
+                                                                                         *** ??? ***
+////////////////////////////////////////////////////////////////////////////////////////////////////------>>>>   FINE
+----------------------------------------------------------------------------------------------------
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+-----^  parte da copiare
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+---------------------------------------------------------------------------------------------------- 2021-10-26
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\------>>>>  INIZIO
+                                                                                         *** ??? ***
+
+=====================================================================================================\
+                                                                                interfaccia web-bash  |
+@@@
+@@@ <-- ricerca di una interfaccia tra browser e bash script
+@@@
+@@@ --> risultato:  provare 'scriptserver'
+@@@       <-- https://github.com/bugy/script-server
+@@@
+
+Vecchie ricerche:  .../gothings-scratchpad/README.gothings.cloud
+    <-- cerca:    --  Roba correlata: websocket & bash
+
+
+DA PROVARE:
+http://websocketd.com/
+  <-- wss://....   <-- usare i websocket con bash
+  Esempi:
+    https://www.bitkistl.com/2016/01/websockets-with-interactive-bash-script.html
+    https://stackoverflow.com/questions/40907888/linux-bash-how-to-open-a-websocket-connection-as-client
+      <-- vari esempi ...
+
+
+http://web-console.org/
+  <-- da vedere meglio
+
+
+https://pypi.org/project/webssh/
+  <-- da vedere meglio
+
+
+
+https://github.com/websockets/wscat
+  <-- ??
+https://github.com/vi/websocat
+  <-- esempi & un po' di doc
+
+https://github.com/progrium/wssh
+http://progrium.viewdocs.io/duplex/getting-started/python/
+  <-- interessante
+https://github.com/progrium/bashstyle
+  <-- best pattern to bash
+
+--- sono qui
+
+https://github.com/stuicey/SSHy
+  <-- SSH terminal  <-- da vedere meglio ...
+
+
+--------------- ipotesi di sviluppo futuro
+--- interazione con raspi-base
+- pagina di accesso su raspi
+  - server http che esegue comandi locali
+    ?-> aprire shell di controllo sul proprio PC
+    ?-> futuro 'http control panel'
+- Pagina WP con raspi-key (da current-user)
+- un iframe che chiama la pagina di accesso
+
+
+------- iframe refs:
+https://www.dyn-web.com/tutorials/iframes/postmessage/
+  <-- tutorial js cross-origin
+https://www.dyn-web.com/tutorials/iframes/refs/parent.php
+  <-- tutorial js same-origin
+
+https://www.templatemonster.com/blog/best-wordpress-iframe-plugins/
+
+
+
+
+                                                                                interfaccia web-bash  |
+=====================================================================================================/
+
+
+
+                                                                                         *** ??? ***
+////////////////////////////////////////////////////////////////////////////////////////////////////------>>>>   FINE
+----------------------------------------------------------------------------------------------------
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  FINE STORIA
