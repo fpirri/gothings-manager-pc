@@ -5,7 +5,7 @@
 Questa doc:
   .../github-gothings/gothings-scratchpad/README.DaRicordare
 ---------------------------------------------------------------------------------------------------- 2021-10-01
-
+                                                                                versione: 1.00
 Scopo: 
   - mini progetti utili, riuniti qui
 
@@ -22,21 +22,32 @@ Note:
                per la storia precedente, cerca:     *** STORIA ***
                                lavoro iniziale:     *** Bash ***
 
-                         Progetti Interessanti:     *** Progetti Futuri ***
-                          Progetto localserver:     Progetto localserver  |
+                                   lavori vari:
+                                                    interfaccia web per GoThings  |
+                                                    GoThings QuickStart  |
+
+
+                         Progetti Interessanti:
+                                                    *** Progetti Futuri ***
+                                                    Progetto localserver  |
 
                                  Script server:     interfaccia web-bash  |
 
                        --- altri elementi storici significativi ---
 
-                  Per cut & paste interessanti:     CUT & PASTE library  -  INIT
 
-last commit:
-       scratchpad : commit olivetin - 0.01 - 03
-      localserver : primo commit - 0.01 - 02
+                  Per cut & paste interessanti:     CUT & PASTE library  -  INIT
 
 
 ****************************************************************************************************
+
+last commit:
+        scratchpad : primi aggiustamenti - v 1.00 - 09
+        scratchpad : commit olivetin - 0.01 - 03
+        scratchpad : scriptserver - v 1.00 - 10
+
+
+
 
 ----------------------------------------------------------------------------------------------------
                                                                                       Internal Index
@@ -58,32 +69,57 @@ Direct jump to interesting points:      <-- search for the below terms
                                                                            *** doc interessante ***
 
 
+
 =====================================================================================================\
-                                                                           certbot renew certificate  |
+                                                                         xxx to control GoThings  |
 
--------- renew letsencrypt certificate
-eseguire:
-.../WP-Sviluppi/gothings/base/dockrepo/sysdata/certbot/go-letsencrypt
-  --> RICORDA:  eseguire il -s reload su nginx !!!  (prima: nginx -t)
-        <-- in realta' NON dipendeva da firefox ! ...
-
-
-
-IP address:
-      ssh yesfi@104.248.95.29           gothings-v09
-      ssh yesfi@188.166.70.203          
-
-                                                                           certbot renew certificate  |
 =====================================================================================================/
 
 
 
 
 =====================================================================================================\
+                                                                  strategia per controllare GoThings  |
+
+- pagina con lista di script eseguibili
+    <-- ne scegli uno e si va alla pagina del singolo script
+- pagina con informazioni dello script e form per l'immissione dei parametri
+    <-- l'utente riempe il form e da' il GO
+    <-- si va alla pagina 'esecuzione dello script'
+- pagina di esecuzione
+  - output box
+  - parameters fields
+  - GO button
+    <-- ad ogni GO i parametri possono cambiare ...
+
+Layout proposto per la pagina:
+  - box di testo (in alto) che mostra lo stream di uscita della pagina
+  - form con i parametri
+  - bottono STOP & GO
+
+??
+  - CGI di esecuzione degli script
+    - accetta i parametri del form
+    - avvisa sul box
+    - invoca lo script con i parametri
+    - se gli serve un input:
+      - salva lo stato
+      - aggiorna il box
+      - ritorna alla pagina
+  ==> potrebbe essere un python / nodejs che chiama uno script
+
+
+
+                                                                  strategia per controllare GoThings  |
+=====================================================================================================/
+
+
+
+=====================================================================================================\
                                                                                 interfaccia web-bash  |
+-- IN PROVA --
 
-Vedi anche vecchia versione in STORIA
-
+Vediamo se si riesce a definire & girare uno script sempice ...
 
 Ref.: https://github.com/bugy/script-server
 
@@ -92,6 +128,19 @@ https://hub.docker.com/r/bugy/script-server
   <-- docker version
 https://pythonrepo.com/repo/bugy-script-server-python-miscellaneous
   <-- introduzione allo script server
+
+- expandcd .zip in ~/script-server/
+- cd in ~/script-server/script-server-master
+    python3 -m pip install tornado
+    tools/init.py --no-npm
+    python3 launcher.py
+
+====>  PARTITO!
+         <-- non ci sono script ...    
+
+
+
+-------------------------  DA VEDERE
 
 Possibile problema:
   GoThings usa docker, come si chiama docker da uno script bash a sua volta
@@ -106,10 +155,15 @@ Altre possibili soluzioni:
 
     https://sites.google.com/site/easybashweb/home?authuser=0
 
+
 Nuova ricerca:   web bash gui   -->
   https://www.olivetin.app/
     <-- l'esempio sembra fatto apposta !
-  --> investigare piu' in dettaglio ...
+
+====> vedi:   interfaccia web per GOThings  |
+
+
+
 
 
 
@@ -138,6 +192,282 @@ https://www.templatemonster.com/blog/best-wordpress-iframe-plugins/
                                                                                 interfaccia web-bash  |
 =====================================================================================================/
 
+
+
+
+=====================================================================================================\
+                                                                   script-server to control GoThings  |
+
+https://github.com/bugy/script-server
+
+
+                                                                   script-server to control GoThings  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                            bash to control GoThings  |
+refs:
+
+
+esempio in:
+  https://blog.eduonix.com/shell-scripting/learn-cgi-scripting-using-bash-in-linux-shell-scripting/
+    <-- per apache in cgi-bin
+
+bookmarks:   WORK LIST --> work --> bash GUI --> FCGI wrap
+-------- ricerca:   nginx cgi-bin bash
+https://www.cyberciti.biz/faq/how-to-install-fcgiwrap-for-nginx-on-ubuntu-20-04/
+https://www.cyberciti.biz/faq/how-to-install-fcgiwrap-for-nginx-on-ubuntu-20-04/#Installing_fcgiwrap_on_Ubuntu_20.04
+https://sleeplessbeastie.eu/2017/09/18/how-to-execute-cgi-scripts-using-fcgiwrap/
+https://tipsmake.com/how-to-install-fcgiwrap-for-nginx-on-ubuntu-2004
+  <-- esempi completi - vederli tutti?
+
+
+
+https://nassif-haynes.com/3/
+  <-- interessante: esegue i file *sh !
+  <-- locations diverse per i vari tipi di cgi
+  <--    "     "    verifica l'esistenza del file
+
+
+
+https://help.ubuntu.com/community/FcgiWrap
+  <-- Istruzioni per FCGI
+
+https://manpages.debian.org/unstable/fcgiwrap/fcgiwrap.8.en.html
+  <-- manuale fcgiwrap
+
+https://serverfault.com/questions/667798/allow-only-local-users-in-nginx/667863
+  <-- SOLO per user LOCALI
+
+RIFLESSIONE:
+- per sicurezza, gli input da browser DEVONO essere SOLO y/n, 'vai avanti', esci e cosi' via
+- a GoThings serve solo dirigere le operazioni ...
+- un vero sistema di management verra' dopo ...
+
+
+rifiniture:
+http://www.yolinux.com/TUTORIALS/BashShellCgi.html
+  <-- esempio di echo in html & passaggio di variabili
+https://techexpert.tips/it/nginx-it/nginx-shell-script-cgi/
+  <-- altro esempio fastcgi
+
+
+
+                                                                            bash to control GoThings  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                      websocketd to control GoThings  |
+refs:
+  http://websocketd.com/
+  https://github.com/joewalnes/websocketd
+    <-- github repository
+bookmarks:   WORK LIST --> work --> websocket
+------
+apri le finestre:
+  http://websocketd.com/
+  https://github.com/joewalnes/websocketd/wiki
+esegui:
+  https://github.com/joewalnes/websocketd/wiki/Download-and-install
+alla fine, vedi anche:
+  https://github.com/joewalnes/websocketd/wiki/Websocketd-behind-Nginx
+
+Primo tentativo:   ???
+
+
+
+                                                                      websocketd to control GoThings  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                         node.js to control GoThings  |
+
+
+
+UTILI:
+  https://stackabuse.com/executing-shell-commands-with-node-js/
+    <-- chiama la shell
+  https://nodejs.dev/learn/accept-input-from-the-command-line-in-nodejs
+    <-- simile a bash shell
+
+DA VEDERE:
+  https://opensource.com/article/18/7/node-js-interactive-cli
+
+  https://www.smashingmagazine.com/2017/03/interactive-command-line-application-node-js/
+
+
+
+                                                                         node.js to control GoThings  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                         XTERM to control GoThings  |
+
+https://github.com/xtermjs/xterm.js
+  NON E' CHIARO come funziona
+  DA STUDIARE
+
+
+                                                                         tkinter to control GoThings  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                         tkinter to control GoThings  |
+
+
+
+
+                                                                         tkinter to control GoThings  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                        OliveTin to control GoThings  |
+
+------------- OliveTin
+Interfaccia web per eseguire bash scripts
+
+refs:
+  https://www.olivetin.app/
+    <-- l'esempio sembra fatto apposta !
+
+  https://docs.olivetin.app/index.html
+    <-- DOCs !
+
+Si segue la strategia prevista    -->     GoThings QuickStart  |
+
+Steps:
+1.- inizializza dockrepo
+    - dovrebbe bastare il create.gothings sul PC
+    - estendere alla raspberry
+    - estendere a windows su PC
+2.- installa OliveTin sul PC
+    - verifica che sia immediamente eseguibile con il browser                   DA VERIFICARE
+3.- installa OliveTin sulla raspberry (con una nuova versione di 0)
+    - forse va fatto a mano la prima volta
+    - modificare il lavoro gia' fatto per usare olivetin
+4.- PROSEGUIRE alla grande !
+
+
+----------------- Primo tentativo
+ref.:   https://github.com/OliveTin/OliveTin/releases
+          <-- versione   2021-07-19 Latest
+          <-- file:   OliveTin_2021-07-19_linux_amd64.deb
+        https://hub.docker.com/r/jamesread/olivetin/tags
+          <-- versione docker
+
+- scarica il file OliveTin_2021-07-19_linux_amd64.deb
+- installa (doppio click che richiama ubuntu software)
+- esiste gia' un file di configurazione:
+      /etc/OliveTin/config.yaml
+  inizialmente non e' editabile
+- crea il servizio olivetin:
+      systemctl enable --now OliveTin
+- FATTO !
+- alternativa di installazione:
+      dpkg -i debFileName
+  dal ref.: https://en.wikipedia.org/wiki/Dpkg
+    <-- nota: esiste anche una versione windows !!
+    <-- usare docker for windows ??
+
+adesso olivetin e' eseguibile:
+- test 'ping google'
+    <-- devi cliccare 'logs' per vedere cosa e' successo
+
+fase successiva: customization
+- icons:
+    https://www.w3schools.com/charsets/ref_utf_dingbats.asp
+    https://www.w3schools.com/charsets/ref_emoji_smileys.asp
+      <-- emoji: def ufficiale
+  vedere altre sorgenti di icone
+- timeout:
+    settabile da 3 (sec) in avanti
+
+--------- prova di customizzazione
+ref.: https://golangexample.com/a-web-interface-for-running-linux-shell-commands/
+
+Come si fa il restart?
+  <-- sembra che rilegga automaticamente il config.yaml
+  - prova con systemctl ?
+      
+
+
+
+
+
+                                                                                SONO QUI
+
+====> vericare sviluppo parametri & interazione:
+        https://github.com/OliveTin/OliveTin/issues/22
+          --> https://github.com/OliveTin/OliveTin/blob/task-arguments/webui/js/ArgumentForm.js
+
+====> INVESTIGARE la sostituzione di nginx con traefik
+
+                                                                        OliveTin to control GoThings  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                           certbot renew certificate  |
+
+-------- renew letsencrypt certificate
+eseguire:
+.../WP-Sviluppi/gothings/base/dockrepo/sysdata/certbot/go-letsencrypt
+  --> RICORDA:  eseguire il -s reload su nginx !!!  (prima: nginx -t)
+        <-- in realta' NON dipendeva da firefox ! ...
+
+==> fare uno script ?                                                           DA FARE
+
+
+IP address:
+      ssh yesfi@104.248.95.29           gothings-v09
+      ssh yesfi@188.166.70.203          
+
+                                                                           certbot renew certificate  |
+=====================================================================================================/
+
+
+
+
+=====================================================================================================\
+                                                                          traefik ingress controller  |
+SOSTITUIRE traefik a nginx ??
+  ====> risolve il problema di aggiungere servizi lato host interno
+          <-- VEDI la figura su github (link ufficiale sotto)
+
+https://github.com/traefik/traefik
+  <-- PRIMA cosa da leggere
+
+Tutorials per traefik:
+https://www.smarthomebeginner.com/traefik-2-docker-tutorial/
+  <-- sembra molto completo
+https://www.alexhyett.com/traefik-vs-nginx-docker-raspberry-pi/
+  
+https://www.digitalocean.com/community/tutorials/how-to-use-traefik-v2-as-a-reverse-proxy-for-docker-containers-on-ubuntu-20-04
+
+
+
+                                                                          traefik ingress controller  |
+=====================================================================================================/
 
 
 
@@ -417,9 +747,10 @@ getent group developers
 =====================================================================================================\
                                                                     Interfaccia raspi-GoThings Cloud  |
 
+VEDI:    traefik ingress controller  |
+
 vedi anche websocketd & seguenti in:   interfaccia web-bash  |
-
-
+vedi anche script server
 
                                                                     Interfaccia raspi-GoThings Cloud  |
 =====================================================================================================/
@@ -486,12 +817,6 @@ Docker container vedere i file locali da browser
 
 
 
-
-
-last commit:
-       localserver : version 0.04 - primi aggiustamenti - 09
-
-
                                                                          Progetto localserver - fine  |
 =====================================================================================================/
 
@@ -539,11 +864,23 @@ Un sito internet per realizzare un aggregatore di dati in stile IDN
 
 
 
+=====================================================================================================\
+                                                                                    Messaging system  |
+
+    https://nats.io/
+
+
+
+                                                                                    Messaging system  |
+=====================================================================================================/
+
+
+
 
 =====================================================================================================\
                                                                                             Qualcosa  |
 
-                                                                                     Qualcosa - fine  |
+                                                                                            Qualcosa  |
 =====================================================================================================/
 
 
@@ -555,21 +892,35 @@ Un sito internet per realizzare un aggregatore di dati in stile IDN
 
 
 
-
-
-
-
-
-
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
----------------------------------------------------------------------------------------------------------- 2021
-
 ---------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------- 2018-08-18
                                                                                    *** STRATEGIA ***/----------
 ---------------------------------------------------------------------------------------------------/
-                                               *** sottotitolo diverso per ogni versione storica ***
+
+
+
+=====================================================================================================\
+                                                                                 GoThings QuickStart  |
+
+Se olivetin mantiene le promesse TUTTO gothings viene molto semplificato!
+
+Steps:
+1.- inizializza dockrepo
+    - dovrebbe bastare il create.gothings sul PC
+    - estendere alla raspberry
+    - estendere a windows su PC
+2.- installa OliveTin sul PC
+    - verifica che sia immediamente eseguibile con il browser                   DA VERIFICARE
+3.- installa OliveTin sulla raspberry (con una nuova versione di 0)
+    - forse va fatto a mano la prima volta
+    - modificare il lavoro gia' fatto per usare olivetin
+4.- PROSEGUIRE alla grande !
+
+
+
+
+                                                                                 GoThings QuickStart  |
+=====================================================================================================/
 
 
 
@@ -577,13 +928,9 @@ Un sito internet per realizzare un aggregatore di dati in stile IDN
 =====================================================================================================\
                                                                                             Qualcosa  |
 
-                                                                                       Qualcosa fine  |
 =====================================================================================================/
 
 
-
-
-                                               *** sottotitolo diverso per ogni versione storica ***
 ---------------------------------------------------------------------------------------------------\
                                                                                    *** STRATEGIA ***\----------
 ---------------------------------------------------------------------------------------------------- \  FINE
@@ -591,23 +938,6 @@ Un sito internet per realizzare un aggregatore di dati in stile IDN
 
 
 
-
-
-------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------/ 2018-08-19
-                                                *** Dettagli di un tema correlato alla strategia ***/-------------
----------------------------------------------------------------------------------------------------/
-                                               *** sottotitolo diverso per ogni versione storica ***
-
-
-
-
-
-                                               *** sottotitolo diverso per ogni versione storica ***
----------------------------------------------------------------------------------------------------\
-                                                *** Dettagli di un tema correlato alla strategia ***\-------------
------------------------------------------------------------------------------------------------------\    FINE
-------------------------------------------------------------------------------------------------------------------
 
 
 ****************************************************************************************************
@@ -658,10 +988,26 @@ Un sito internet per realizzare un aggregatore di dati in stile IDN
 
 
 
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+---------------------------------------------------------------------------------------------------- 2021-10-28
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\------>>>>  INIZIO
+                                                                                     *** web-bash ***
+                                                                                     *** web-bash ***
+////////////////////////////////////////////////////////////////////////////////////////////////////------>>>>   FINE
+----------------------------------------------------------------------------------------------------
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+
+
+
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ---------------------------------------------------------------------------------------------------- 2021-10-26
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\------>>>>  INIZIO
-                                                                                         *** ??? ***
+                                                                                     *** web-bash ***
 
 =====================================================================================================\
                                                                                 interfaccia web-bash  |
@@ -737,7 +1083,7 @@ https://www.templatemonster.com/blog/best-wordpress-iframe-plugins/
 
 
 
-                                                                                         *** ??? ***
+                                                                                     *** web-bash ***
 ////////////////////////////////////////////////////////////////////////////////////////////////////------>>>>   FINE
 ----------------------------------------------------------------------------------------------------
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
