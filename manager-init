@@ -123,55 +123,44 @@ echo "    ${GitFile}"
 echo "into local file"
 echo "    ${LocalFile}"
 echo
+pause
 wget -O ${LocalFile} $GitFile
 echo
 if [[ -s $LocalFile ]]; then
   echo
-  dots 3
-  echo "The archive file exists, you can expand it"
-else
+  echo -e "${Red}"
   echo "File $LocalFile not found, stop processing"
+  echo -e "${Std}"
+  echo
+  dots 3
+  echo "The archive file exists, going on ..."
+else
+  echo -e "${Red}"
+  echo "File $LocalFile not found, stop processing"
+  echo -e "${Std}"
   echo
   return 1
   echo "-------"
   exit
 fi
 echo
-echo "In the following I will EXPAND the archive into ~/dockrepo,"
-echo "then I will run a few python 3 script and install the script-server"
-read -rsp "Do you like to continue ? [y/N] " -n 1 key
-case "$key" in
-    [yY]) 
-      echo
-      echo "Expand into ~/dockrepo ..."
-      echo
-      sudo tar xpf "${LocalFile}" -C "$HomeDir"
-      echo
-      echo "Done."
-      echo
-      ;;
-    *)
-      echo
-      echo "Nothing do, back to console"
-      dots 2
-      echo
-      exit
-      ;;
-esac
+echo "Expand into ~/dockrepo ..."
+echo
+sudo tar xpf "${LocalFile}" -C "$HomeDir"
+echo
+echo "Done."
+echo
 #
 ################################################################################
 #                                                              exec start script
 echo
-
-exit
-
 echo
 read -rsp "Do you like to start the localserver now ? [y/N] " -n 1 key
 case "$key" in
   [yY]) 
     echo
     echo "Start localserver ...."
-    ./dockrepo/start_localserver
+    ./dockrepo/start_pc_manager
     echo
     echo "Done."
     echo
@@ -185,30 +174,5 @@ case "$key" in
     exit
     ;;
 esac
-exit
 #
 ################################################################################
-#
-#!/bin/bash
-#                                                                    2020-02-10
-#  Start script-servetr on PC
-#
-ServiceName="manager-pc"
-Home=$home
-DockDir="${Home}dockrepo/"
-WorkDir="${Home}dockrepo/sysdata/${ServiceName}/"
-#
-echo
-echo
-echo "---------------------------------------------------------"
-echo "START ${ServiceName}"
-echo
-echo "Starting docker-compose ..."
-cd ${WorkDir}
-echo "now in dir:"
-pwd
-echo "Starting ${ServiceName} ..."
-./tools/init.py --no-npm
-python3 launcher.py
-echo
-echo "Done."
