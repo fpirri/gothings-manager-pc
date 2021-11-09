@@ -25,7 +25,7 @@ echo "============================================================ PC GOTHINGS"
 echo
 echo "      GOTHINGS boot loader for PC Manager"
 echo
-echo "========================================================= version ${Version}"
+echo "============================================================ version ${Version}"
 echo
 #
 ################################################################################
@@ -105,7 +105,7 @@ echo "  ${FileName}"
 echo "from github and expand it to the ~/dockrepo directory of this machine."
 echo
 echo "Please read the README.md file on"
-echo "  https://github.com/fpirri/gothings-$(AppType}-$(AppName}#readme"
+echo "  https://github.com/fpirri/gothings-${AppType}-${AppName}#readme"
 echo "for an explanation of the operations that will be performed."
 echo
 echo "At the end, the user will be able to verify the operations carried out"
@@ -116,26 +116,21 @@ pause
 #
 ################################################################################
 #
-exit
 echo ""
 echo "archive to read from github:"
 echo "    ${GitFile}"
 echo "into local file"
 echo "    ${LocalFile}"
 echo
-pause
 wget -O ${LocalFile} $GitFile
 echo
 if [[ -s $LocalFile ]]; then
-  echo
-  echo -e "${Red}"
-  echo "File $LocalFile not found, stop processing"
-  echo -e "${Std}"
   echo
   dots 3
   echo "The archive file exists, going on ..."
 else
   echo -e "${Red}"
+  echo
   echo "File $LocalFile not found, stop processing"
   echo -e "${Std}"
   echo
@@ -152,27 +147,16 @@ echo "Done."
 echo
 #
 ################################################################################
-#                                                              exec start script
+#                                                            exec install script
+#######
+#  give control to the install script
+#######
 echo
 echo
-read -rsp "Do you like to start the localserver now ? [y/N] " -n 1 key
-case "$key" in
-  [yY]) 
-    echo
-    echo "Start localserver ...."
-    ./dockrepo/start_pc_manager
-    echo
-    echo "Done."
-    echo
-    ;;
-  *)
-    echo
-    echo
-    echo "Nothing to do, back to console"
-    dots 2
-    echo
-    exit
-    ;;
-esac
+echo "Install PC Manager ...."
+./dockrepo/install_pc_manager
+echo
+echo "Done."
+echo
 #
 ################################################################################
