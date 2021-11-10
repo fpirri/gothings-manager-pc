@@ -1,0 +1,23 @@
+#!/bin/bash
+#                                                                    2020-02-10
+#  Start nginx  (in localhost)
+#
+ServiceName="script-server"
+Home=$home
+DockDir="${Home}dockrepo/"
+WorkDir="${Home}dockrepo/sysdata/${ServiceName}/"
+#
+echo
+echo
+echo "---------------------------------------------------------"
+echo "START the local ${ServiceName}"
+echo
+echo "Starting docker-compose ..."
+cd ${WorkDir}
+echo "now in dir:"
+pwd
+echo "Starting ${ServiceName} ..."
+./tools/init.py --no-npm
+python3 launcher.py
+echo
+echo "Done."

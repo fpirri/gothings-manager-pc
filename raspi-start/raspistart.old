@@ -1,0 +1,190 @@
+#!/bin/bash
+#                                                                    2020-03-12
+#    Installa bugy/script-server sulla raspi
+                                                                  Version="0.01"
+#  NOTA: primo tentativo sulla raspi
+#
+#
+#
+#  Vedi doc in:
+#    .../github-gothings/gothings-scratchpad/README.DaRicordare
+#         <-- cerca:      script-server to control GoThings  |
+#
+#===============================================================================
+#                                                                 Organizzazione
+#  download latest da repository
+#  installa sulla raspi
+#  ??
+#
+#
+################################################################################
+#
+#==============================================================================
+echo
+echo "========================================================= raspi GOTHINGS"
+echo
+echo "      GOTHINGS boot loader for raspberry pi boards"
+echo
+echo "========================================================= version ${Version}"
+echo
+#
+################################################################################
+#                                                                variabili utili
+# ----------------------------------
+# Mode: DEBUG
+DebugMode=1                     # 0 == NO debug     > 0 == Show debug info
+#
+# ----------------------------------
+# Define app
+AppType="raspi"
+AppName="start"
+AppDisplayName="Raspi Start"
+#
+# ----------------------------------
+# variabili interne
+HomeDir=~/
+DockDir="${HomeDir}dockrepo/"
+AppDir="${DockDir}sysdata/${AppName}/"
+FileName="${AppName}dirs.tar.gz"
+#        https://github.com/fpirri/gothings-raspi-start/raw/main/startdirs.tar.gz
+GitFile="https://github.com/fpirri/gothings-${AppType}-${AppName}/raw/main/${FileName}"
+LocalFile="${HomeDir}${FileName}"
+# ----------------------------------
+# costanti varie
+Red='\033[0;41;30m'
+Std='\033[0;0;39m'
+#
+#
+##########################################################################
+#  Funzioni utili
+##########################################################################
+avanti(){
+# Domanda di continuazione personalizzabile
+# call:    avanti \$1
+#   \$1:   <stringa di domanda>
+  echo "----------------------------------------------------------------"
+  read -rsp "$1" -n 1 key
+  echo
+}
+#
+pause() {
+#  Domanda 'continue or exit'
+  avanti 'Press any key to continue or ^C to exit ...'
+}
+#
+##########################################################################
+dots(){
+# wait $1 seconds, printing dots on the screen
+#   $1 :  # of seconds to wait
+  local param1
+  printf -v param1 '%d\n' $1 2>/dev/null # converti in intero con tutti i controlli
+  while [ $param1 -gt 0 ]
+  do
+    echo -n "."
+    sleep 0.5
+    echo -n "."
+    sleep 0.5
+    let "--param1"
+  done
+}
+#
+##########################################################################
+dots_nl(){ #  Dots 'new line'
+# wait $1 seconds, printing dots on the screen
+#
+# add a newline at the end
+#
+  dots $1
+  echo
+}
+#
+################################################################################
+#                                                                avvisi iniziali
+echo "This script downloads the archive:"
+echo "  ${FileName}"
+echo "from github and expand it to the ~/dockrepo directory of this machine."
+echo
+echo "Please read the README.md file on"
+echo "  https://github.com/fpirri/gothings-$(AppName}#readme"
+echo "for an explanation of the operations that will be performed."
+echo
+echo "At the end, the user will be able to verify the operations carried out"
+echo "and execute the script for creating the local web server."
+echo "Your sudo password will be asked for in the following."
+echo
+pause
+#
+################################################################################
+#
+exit
+echo ""
+echo "archive to read from github:"
+echo "    ${GitFile}"
+echo "into local file"
+echo "    ${LocalFile}"
+echo
+wget -O ${LocalFile} $GitFile
+echo
+if [[ -s $LocalFile ]]; then
+  echo
+  dots 3
+  echo "The archive file exists, you can expand it"
+else
+  echo "File $LocalFile not found, stop processing"
+  echo
+  return 1
+  echo "-------"
+  exit
+fi
+echo
+echo "In the following I will EXPAND the archive into ~/dockrepo,"
+echo "then I will run a few python 3 script and install the script-server"
+read -rsp "Do you like to continue ? [y/N] " -n 1 key
+case "$key" in
+    [yY]) 
+      echo
+      echo "Expand into ~/dockrepo ..."
+      echo
+      sudo tar xpf "${LocalFile}" -C "$HomeDir"
+      echo
+      echo "Done."
+      echo
+      ;;
+    *)
+      echo
+      echo "Nothing do, back to console"
+      dots 2
+      echo
+      exit
+      ;;
+esac
+#
+################################################################################
+#                                                              exec start script
+echo
+
+exit
+
+echo
+read -rsp "Do you like to start the localserver now ? [y/N] " -n 1 key
+case "$key" in
+  [yY]) 
+    echo
+    echo "Start localserver ...."
+    ./dockrepo/start_localserver
+    echo
+    echo "Done."
+    echo
+    ;;
+  *)
+    echo
+    echo
+    echo "Nothing to do, back to console"
+    dots 2
+    echo
+    exit
+    ;;
+esac
+#
+################################################################################
+#

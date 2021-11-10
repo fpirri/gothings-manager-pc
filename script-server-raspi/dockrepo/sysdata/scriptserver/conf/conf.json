@@ -1,0 +1,9 @@
+{
+  "title": "Script server",
+  "port": "5000",
+  "access": {
+	"allowed_users": [ "*" ],
+	"admin_users": [ "192.168.1.110" ],
+    "trusted_ips": [ "192.168.0.0/16" ]
+  }
+}

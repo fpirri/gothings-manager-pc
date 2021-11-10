@@ -22,18 +22,28 @@ Note:
                per la storia precedente, cerca:     *** STORIA ***
                                lavoro iniziale:     *** Bash ***
 
+                                 Script server:     script-server to control GoThings  |
+                                                    GoThings Manager PC  |
+
                                    lavori vari:
-                                                    interfaccia web per GoThings  |
-                                                    GoThings QuickStart  |
+                                                    strategia per GoThings Raspi  |
+               ???                                  interfaccia web per GoThings  |
+                                                    Progetto localserver  |
+
+
+                               ricerche google:     nodejs to control GoThings  |
+                                                    bash to control GoThings  |
+                                                    websocketd to control GoThings  |
+                                                    tkinter to control GoThings  |
+                                                    OliveTin to control GoThings  |
+
 
 
                          Progetti Interessanti:
                                                     *** Progetti Futuri ***
-                                                    Progetto localserver  |
 
-                                 Script server:     interfaccia web-bash  |
 
-                       --- altri elementi storici significativi ---
+
 
 
                   Per cut & paste interessanti:     CUT & PASTE library  -  INIT
@@ -42,20 +52,24 @@ Note:
 ****************************************************************************************************
 
 last commit:
-        scratchpad : primi aggiustamenti - v 1.00 - 09
+        scratchpad : sviluppo pc-manager - v 1.00 - 15
         scratchpad : commit olivetin - 0.01 - 03
-        scratchpad : scriptserver - v 1.00 - 10
+        scratchpad : scriptserver: init - v 1.00 - 1
+        scratchpad : manageraspi: init - v 1.00 - 1
+        pc-manager : init - v 1.00 - 15
 
 
 
 
 ----------------------------------------------------------------------------------------------------
-                                                                                      Internal Index
-Direct jump to interesting points:      <-- search for the below terms
+                                                                                      Prossimi passi
+-------------------------------------
+PIRRI.NET
+PIRRI.ME
+  <-- certbot
+  <-- definire progetto
 
-*** STRATEGIA ***
-    ... sottopunto ...
-        ... altro sottopunto ...
+
 
 
 
@@ -77,10 +91,177 @@ Direct jump to interesting points:      <-- search for the below terms
 
 
 
+=====================================================================================================\
+                                                                                 GoThings Manager PC  |
+scopo:
+  - gestire tutto dal PC con un browser
+  - installare tutto con un solo script
+
+Strategia:
+  - si install lo script-server su PC come servizio docker
+  - script di start classico per docker
+
+Strategia bis:
+  - si aggiunge uno script che prima installa il docker, poi installa
+    il Manager-PC
+
+Implementazione:
+  - script di start classico: manager-pc-start
+
+
+Quick Start:
+
+---- passo 0 : download software from github
+da terminal in $home:
+    wget -O ${HOME}/manager-init https://github.com/fpirri/gothings-pc-manager/blob/main/manager-init
+      <-- espande l'archivio managedirs.tar.gz in dockrepo
+                                 https://github.com/fpirri/gothings-pc-manager/blob/main/manager-init
+
+---- passo 1 : install ambiente docker
+Chiamato dallo script di install:
+
+NOTA: install_pc_manager  -->  verificare docker, creare i networks,  ?
+      
+
+---- passo 2 : start docker script server
+Chiamato dallo script di install:
+
+
+
+---------------------  ADMIN
+in conf.json vanno definiti:
+	"admin_users": [ "172.29.196.1", "192.168.1.110", "192.168.4.197" ],
+    "trusted_ips": [ "172.29.196.1", "192.168.0.0/16" ]
+dove l'admin e' "172.29.196.1", ovvero il browser sul docker host che passa 
+dal docker network bridge interno
+  (congettura probabilmente valida ...)
+
+
+---------------------
+
+ALTERNATIVA al passo 0  (equivalente)
+wget -O ${HOME}/managerdirs.tar.gz https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz; \
+sudo tar xpf "${HOME}/managerdirs.tar.gz" -C "${HOME}"; \
+./dockrepo/install_pc_manager
+                                   https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz
+  <==== FUNZIONA !
+
+
+
+                                                                                 GoThings Manager PC  |
+=====================================================================================================/
+
+
+
 
 =====================================================================================================\
-                                                                  strategia per controllare GoThings  |
+                                                                        strategia per GoThings Raspi  |
 
+----------------------------- nuovo percorso
+si parte da PC
+  - si evitano troppi passi con bash & terminale
+  ---------
+  - da pensare:
+    - eliminare la modifica di OS come .img
+        <-- con edit sulle partizioni boot & ???
+        <-- postare su una droplet 1/2 img di raspbian modificato ???
+        ping raspberrypi.local   <-- find IP
+    - gira un .sh all'inizio
+        https://raspberrypi-guide.github.io/programming/run-script-on-boot
+  ---------
+  - passo 0:
+    - segui una procedura consigliata per accedere via ssh alla tua scheda
+    - passi seguenti, eventualmente da uno script server remoto                 DA FARE & PROVARE
+        <-- usa lo script-server di prova per fare una prova di ssh da remoto ...
+      - 
+
+FARE uno script che trasferisce un file da PC a raspberry e lo esegue, sempre via ssh
+
+Comando da PC verso la raspi:
+scp -p file.orig pi@192.168.1.43:/home/pi/pippo.txt
+scp -p /home/superman/pippo.txt pi@192.168.1.43:/home/pi/pippo.txt
+
+passo 0
+  - set up scrip-server-pc
+      --> script-server local: si eseguono operazioni con il browser,
+          evitando di usare la shell
+      <-- vedere come trasportare la cosa su windows
+           (dovrebbe essere facile)
+passo 1 (install raspi)
+  - da PC, si inizializza la raspi
+      --> si ottiene una raspi capace di accettare ed operare comandi
+  - si copiano sulla raspi codice ed i dati dello script-server
+  - si inizializza e si fa partire (come servizio) lo scrip-server
+  - si passa alla fase operativa
+passo 2 (ripetibile)
+  - da PC, si immettono uno o piu' script
+  - restart della raspi per attivare i nuovi script   (necessario??)
+passo 3 (ripetibile)
+  - da browser si eseguono operazioni sulla raspi ...
+
+                                                                                SONO QUI
+
+
+
+
+------ Passo 0
+Prerequisiti:
+  - sd-card con OS iniziale & credenziali wifi
+      <-- scheda raggiungibile in ssh su wifi
+      <-- ethernet dove applicabile
+      <-- console fisica se disponibile (non testato)
+Obiettivo:
+  - bootstrap scheda pronto, accesso da browser
+  - start automatico del passo successivo   <--  script
+implementazione:
+  - installazione & test di docker & docker-compose                 <-- rimandabile?
+  - repo:     gothings-raspi-install
+  - script:   0
+              nel passo finale chiama go-raspi (in questo repo)
+                <-- per semplicita' di sviluppo si separano i due script
+VECCHIO:  go-raspi chiama manage-raspi  -->  poi si va a raspi-basezero con la vecchia filosofia
+  NUOVO:  go-raspi installa il local server  --> nuova strategia per il controllo da browser
+
+Risultato: => controllo raspi da browser, con script-server
+
+===> si torna su gothings-scratchpad per lo sviluppo del nuovo go-raspi === ??
+     vedi:   .../gothings-scratchpad/README.DaRicordare
+             cerca:  
+
+
+------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------- BUTTARE ?
+Seguito: DA RIVEDERE
+------ Passo 1
+Obiettivo:
+  - script-server installato e funzionante
+  - set base iniziale di script:
+    - installazione docker ??
+    - installazione raspi-basezero
+====> raspi in configurazione usabile da un utente semplice
+
+
+------ Passo 2
+Obiettivo:
+  - raspi usabile per uno scopo specifico
+
+------ Passo 2bis
+Obiettivo:
+  - raspi usabile per AI vision
+
+
+------------------------- Implementazione
+------ Passo 0
+
+------ Passo 1
+  gothings-raspi-basezero --> script manage-raspi-go   -- DA AGGIUSTARE  --
+    manage-raspi-go --> aggiustare per script-server
+    script-server --> configurare per l'installazione di basezero
+
+
+
+
+-------------------------------------------------------- sotto: RIVEDERE        BUTTARE tutta la sezione?
 - pagina con lista di script eseguibili
     <-- ne scegli uno e si va alla pagina del singolo script
 - pagina con informazioni dello script e form per l'immissione dei parametri
@@ -110,14 +291,16 @@ Layout proposto per la pagina:
 
 
 
-                                                                  strategia per controllare GoThings  |
+                                                                        strategia per GoThings Raspi  |
 =====================================================================================================/
 
 
 
 =====================================================================================================\
                                                                                 interfaccia web-bash  |
--- IN PROVA --
+
+
+-- IN  -- ????
 
 Vediamo se si riesce a definire & girare uno script sempice ...
 
@@ -128,16 +311,65 @@ https://hub.docker.com/r/bugy/script-server
   <-- docker version
 https://pythonrepo.com/repo/bugy-script-server-python-miscellaneous
   <-- introduzione allo script server
+https://github.com/bugy/script-server/wiki/Script-config
+  <-- guida alla configurazione
 
-- expandcd .zip in ~/script-server/
+:PROVA
+- expand .zip in ~/script-server/
 - cd in ~/script-server/script-server-master
     python3 -m pip install tornado
     tools/init.py --no-npm
     python3 launcher.py
+- parte, ma non ci sono script ...
+====> OK, facciamo qualche aggiustamento alloscript di start
 
-====>  PARTITO!
-         <-- non ci sono script ...    
 
+------------------------------------------ procedura di setup
+- download software
+  https://github.com/bugy/script-server/releases/
+    <-- contiene i puntatori alle versioni: dev, 1.16 (latest), ...
+    <-- si sceglie: 'latest'
+  https://github.com/bugy/script-server/releases/latest/download/script-server.zip
+    <-- risorsa da scaricare
+    <-- si espande in ~/dockrepo/sysdata/script-server
+- diversita' tra primo tentativo e zip iniziale:
+    <-- solo nei dir conf & src
+- nuovo tentativo di start:
+  - add dir:   .../conf/scripts
+    ./script-server-start    (in home/superman)
+    ==> per i comandi vedi sopra:     :PROVA
+  - il server parte ed e' visibile ...
+  - si immette:
+    script name   -->  destroy_world
+    script path   -->  ./scripts/destry_world.py
+    description   -->  This is a very dangerous script, ....
+      <-- SAVE button
+  - ovviamente, non trova lo script
+      <-- copia lo script da samples --> scripts ...
+      -->  FUNZIONA !!!
+
+
+------------------------------------------- altre prove;
+- prova sudo
+  - file sudotest
+      --> richiede la pwd e FUNZIONA!
+
+
+--------------------------- Prova 'gothings su PC'
+scopo:
+limitare al massimo l'uso di script da terminale e comandare da browser
+2.a prova
+- mettere il lancio dello script-server in create-gothings
+- aggiungere lo script-server ai servizi del PC
+- lanciare il localserver con uno script (e' un servizio dockerizzato)
+- aggiungere i servizi per controllare le raspi ...
+
+
+
+
+ref:
+  https://github.com/bugy/script-server/tree/stable/samples/scripts
+    <-- script di esempio
 
 
 -------------------------  DA VEDERE
@@ -152,18 +384,19 @@ Altre possibili soluzioni:
     https://stackoverflow.com/questions/32163955/how-to-run-shell-script-on-host-from-docker-container
     https://stackoverflow.com/questions/31720935/execute-host-commands-from-within-a-docker-container
 
+======> usare fastcgi?    <-- FCGI wrap
 
-    https://sites.google.com/site/easybashweb/home?authuser=0
 
+
+
+https://sites.google.com/site/easybashweb/home?authuser=0
 
 Nuova ricerca:   web bash gui   -->
   https://www.olivetin.app/
     <-- l'esempio sembra fatto apposta !
+    In realta' mancano molte dlle cose presenti nello script-server
 
 ====> vedi:   interfaccia web per GOThings  |
-
-
-
 
 
 
@@ -188,7 +421,6 @@ https://www.templatemonster.com/blog/best-wordpress-iframe-plugins/
 
 
 
-
                                                                                 interfaccia web-bash  |
 =====================================================================================================/
 
@@ -197,8 +429,178 @@ https://www.templatemonster.com/blog/best-wordpress-iframe-plugins/
 
 =====================================================================================================\
                                                                    script-server to control GoThings  |
+---------------------------------------------
+successore di:
+  interfaccia web-bash  |               <-- esplorazione su PC
+  strategia per GoThings Raspi  |       <-- elucubrazioni da verificare
+  bash to control GoThings  |           <-- ricerca google iniziale
+  websocketd to control GoThings  |     <-- ricerca interessante che potrebbe esse utile in futuro
+  node js to control GoThings  |
+  xterm to control GoThings  |
+---------------------------------------------
+
+
+===> NUOVO obiettivo
+- sostituire '0' con una versione 'scriptserver'
+- RIFARE 0 usando lo scriptserver     <-- chiamarlo 'raspi-start' ??
+
+---------------- Install script server sulla raspi
+                                                        da:  interfaccia web-bash  |
+
+Doc da vedere:
+https://hub.docker.com/r/bugy/script-server
+  <-- docker version
+https://pythonrepo.com/repo/bugy-script-server-python-miscellaneous
+  <-- introduzione allo script server
+https://github.com/bugy/script-server/wiki/Script-config
+  <-- guida alla configurazione
+
+si scarica:
+https://github.com/bugy/script-server/releases/latest/download/script-server.zip
+  <-- risorsa da scaricare
+  <-- si espande in ~/dockrepo/sysdata/script-server
+
+
+----------------Prova manuale
+Download archive da github:
+  - crea il dir ~/dockrepo/dockimages/scriptserver/
+      wget -O ~/dockrepo/dockimages/scriptserver/scriptserver.zip https://github.com/bugy/script-server/releases/latest/download/script-server.zip
+  - crea il dir ~/dockrepo/sysdata/scriptserver/
+  - unzip da dockimages a sysdata
+      # unzip /path/to/archive.zip "in/archive/folder/*" -d "/path/to/unzip/to"
+      unzip ~/dockrepo/dockimages/scriptserver/scriptserver.zip -d ~/dockrepo/sysdata/scriptserver/
+  - verifica dir:
+      ls -la ~/dockrepo/sysdata/scriptserver/
+      cd ~/dockrepo/sysdata/scriptserver/
+  - facciamolo partire:
+    python3 -m pip install tornado
+        <-- Successfully installed tornado-6.1
+    pip3 install -r requirements.txt
+        <-- NON provato: e' solo una verifica?
+    python3 launcher.py
+        <-- sembra funzionare (porta 5000)
+
+
+------------ Prova service con systemd
+ref.:
+    https://github.com/bugy/script-server/wiki/Installing-on-virtualenv-(linux)
+        <-- meglio il docker ?
+proviamo virtualenv & systemd:
+                                        parte da rivedere (ricostruita a memoria)
+vedi:  https://github.com/bugy/script-server/wiki/Installing-on-virtualenv-(linux)
+  <-- si fa sudo -i
+installa virtualenv, vedi:
+        https://github.com/bugy/script-server/wiki/Running-as-a-linux-service#systemd
+    apt update
+    apt install python3-venv
+    nano script-server.service    <-- in: /lib/systemd/system/
+        <-- vedi: 
+
+comandi disponibili:
+    systemctl enable script-server.service
+    systemctl start script-server.service
+    systemctl stop script-server.service
+
+edit systemd:
+    sudo nano /lib/systemd/system/script-server.service
+-->
+[Unit]
+Description=Script Server
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/usr/bin/python3 /home/pi/dockrepo/sysdata/scriptserver/launcher.py
+
+  <====   come servizio:    NON FUNZIONA
+
+- lanciato da terminale:    FUNZIONA
+
+- aggiungiamo .../conf/conf.json
+
+---------- raspistart
+  .../github-gothings/gothings-raspi-start/raspistart
+      script per inizializzare lo script-server sulla raspi
+
+
+
+
+
+
+ref.:  https://github.com/bugy/script-server/wiki/Server-configuration
+- preso conf.json da samples
+- edit conf.json
+  - aggiunti valori default minimi
+  - aggiunto admin_users   <-- tutta la rete locale/16
+      <-- fare estensione per le LAN conosciute                                 DA FARE
+
+
+
+
+
+================================================================================
+:PROVA
+- expand .zip in ~/script-server/
+- cd in ~/script-server/script-server-master
+    python3 -m pip install tornado
+    tools/init.py --no-npm
+    python3 launcher.py
+- parte, ma non ci sono script ...
+====> OK, facciamo qualche aggiustamento alloscript di start
+
+
+------------------------------------------ procedura di setup
+- download software
+  https://github.com/bugy/script-server/releases/
+    <-- contiene i puntatori alle versioni: dev, 1.16 (latest), ...
+    <-- si sceglie: 'latest'
+- diversita' tra primo tentativo e zip iniziale:
+    <-- solo nei dir conf & src
+- nuovo tentativo di start:
+  - add dir:   .../conf/scripts
+    ./script-server-start    (in home/superman)
+    ==> per i comandi vedi sopra:     :PROVA
+  - il server parte ed e' visibile ...
+  - si immette:
+    script name   -->  destroy_world
+    script path   -->  ./scripts/destry_world.py
+    description   -->  This is a very dangerous script, ....
+      <-- SAVE button
+  - ovviamente, non trova lo script
+      <-- copia lo script da samples --> scripts ...
+      -->  FUNZIONA !!!
+
+
+  - 
+
+
 
 https://github.com/bugy/script-server
+
+Prerequisiti:
+  - sd-card con OS iniziale & credenziali wifi
+      <-- scheda raggiungibile in ssh su wifi
+      <-- ethernet dove applicabile
+      <-- console fisica se disponibile (non testato)
+Obiettivo:
+  - bootstrap per accesso da browser
+  - start automatico del passo successivo   <--  script
+implementazione:
+  - installazione & test di docker & docker-compose                 <-- rimandabile?   <-- SI
+  - repo:     gothings-raspi-install
+  - script:   0
+              nel passo finale chiama go-raspi (in questo repo)
+                <-- per semplicita' di sviluppo si separano i due script
+VECCHIO:  go-raspi chiama manage-raspi  -->  poi si va a raspi-basezero con la vecchia filosofia
+  NUOVO:  go-raspi installa il local server  --> nuova strategia per il controllo da browser
+
+Risultato: => controllo raspi da browser, con script-server
+
+
+
 
 
                                                                    script-server to control GoThings  |
@@ -313,14 +715,14 @@ DA VEDERE:
 
 
 =====================================================================================================\
-                                                                         XTERM to control GoThings  |
+                                                                           XTERM to control GoThings  |
 
 https://github.com/xtermjs/xterm.js
   NON E' CHIARO come funziona
   DA STUDIARE
 
 
-                                                                         tkinter to control GoThings  |
+                                                                           XTERM to control GoThings  |
 =====================================================================================================/
 
 
@@ -898,33 +1300,6 @@ Un sito internet per realizzare un aggregatore di dati in stile IDN
 ---------------------------------------------------------------------------------------------------/
 
 
-
-=====================================================================================================\
-                                                                                 GoThings QuickStart  |
-
-Se olivetin mantiene le promesse TUTTO gothings viene molto semplificato!
-
-Steps:
-1.- inizializza dockrepo
-    - dovrebbe bastare il create.gothings sul PC
-    - estendere alla raspberry
-    - estendere a windows su PC
-2.- installa OliveTin sul PC
-    - verifica che sia immediamente eseguibile con il browser                   DA VERIFICARE
-3.- installa OliveTin sulla raspberry (con una nuova versione di 0)
-    - forse va fatto a mano la prima volta
-    - modificare il lavoro gia' fatto per usare olivetin
-4.- PROSEGUIRE alla grande !
-
-
-
-
-                                                                                 GoThings QuickStart  |
-=====================================================================================================/
-
-
-
-
 =====================================================================================================\
                                                                                             Qualcosa  |
 
@@ -993,8 +1368,33 @@ Steps:
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ---------------------------------------------------------------------------------------------------- 2021-10-28
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\------>>>>  INIZIO
-                                                                                     *** web-bash ***
-                                                                                     *** web-bash ***
+                                                                                  OliveTin quickstart
+
+
+=====================================================================================================\
+                                                                                 GoThings QuickStart  |
+
+Se olivetin mantiene le promesse TUTTO gothings viene molto semplificato!
+
+Steps:
+1.- inizializza dockrepo
+    - dovrebbe bastare il create.gothings sul PC
+    - estendere alla raspberry
+    - estendere a windows su PC
+2.- installa OliveTin sul PC
+    - verifica che sia immediamente eseguibile con il browser                   DA VERIFICARE
+3.- installa OliveTin sulla raspberry (con una nuova versione di 0)
+    - forse va fatto a mano la prima volta
+    - modificare il lavoro gia' fatto per usare olivetin
+4.- PROSEGUIRE alla grande !
+
+
+
+
+                                                                                 GoThings QuickStart  |
+=====================================================================================================/
+
+                                                                                  OliveTin quickstart
 ////////////////////////////////////////////////////////////////////////////////////////////////////------>>>>   FINE
 ----------------------------------------------------------------------------------------------------
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

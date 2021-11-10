@@ -1,0 +1,50 @@
+{
+  "port": 8080,
+  "address": "192.168.0.1",
+  "title": "My Script Server",
+  "ssl": {
+    "key_path": "testing/ssl/script-server.key",
+    "cert_path": "testing/ssl/script-server.crt"
+  },
+  "auth": {
+    "type": "ldap",
+    "url": "ldap://127.0.0.1",
+    "username_pattern": "uid=$username,ou=people,dc=test,dc=ldap",
+    "version": 3,
+    "base_dn": "dc=test,dc=ldap",
+    "client_id": "12345678.apps.googleusercontent.com",
+    "secret": "AbCdEfgHI"
+  },
+  "access": {
+	"allowed_users": [ "myname", "my_friend", "jack", "joe", "jihn" ],
+	"admin_users": [ "buggy@gmail.com", "myname" ],
+	"groups": {
+		"dev": ["jack", "joe", "jihn"],
+		"support": ["my_friend"],
+		"all": ["@admin_users", "@dev", "@support", "alice"]
+	},
+	"trusted_ips": [ "192.168.0.1", "192.168.0.2" ]
+  },
+  "alerts": {
+    "destinations": [
+      {
+        "type": "email",
+        "from": "buggygm@gmail.com",
+        "to": "buggygm@gmail.com",
+        "server": "smtp.gmail.com",
+        "auth_enabled": true,
+        "login": "buggygm@gmail.com",
+        "password": "$$EMAIL_PWD",
+        "tls": true,
+        "url": "localhost:5000/test_alerts"
+      }
+    ]
+  },
+  "logging": {
+    "execution_file": "$DATE-$ID.log",
+    "execution_date_format": "%y-%m-%d_%H-%M"
+  },
+  "security": {
+    "xsrf_protection": "token"
+  }
+}
