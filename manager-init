@@ -1,21 +1,17 @@
 #!/bin/bash
 #                                                                    2020-03-12
-#    Installa bugy/script-server sulla raspi
-                                                                  Version="1.00"
-#  NOTA: primo tentativo sulla raspi
+#    Installa bugy/script-server sul PC
+#                                                                  Version="1.00"
+wget -O ${HOME}/managerdirs.tar.gz https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz; \
+sudo tar xpf "${HOME}/managerdirs.tar.gz" -C "${HOME}"; \
+./dockrepo/install_pc_manager
 #
 #
-#
-#  Vedi doc in:
-#    .../github-gothings/gothings-scratchpad/README.DaRicordare
-#         <-- cerca:      script-server to control GoThings  |
 #
 #===============================================================================
 #                                                                 Organizzazione
-#  download latest (?) da repository
+#  download latest manager da repository
 #  installa sul PC
-#  ??
-#
 #
 ################################################################################
 #
@@ -25,138 +21,21 @@ echo "============================================================ PC GOTHINGS"
 echo
 echo "      GOTHINGS boot loader for PC Manager"
 echo
-echo "============================================================ version ${Version}"
+echo "============================================================ version 1.00"
 echo
 #
 ################################################################################
-#                                                                variabili utili
-# ----------------------------------
-# Mode: DEBUG
-DebugMode=1                     # 0 == NO debug     > 0 == Show debug info
 #
-# ----------------------------------
-# Define app
-AppType="pc"
-AppName="manager"
-AppDisplayName="PC Manager"
-#
-# ----------------------------------
-# variabili interne
-HomeDir=~/
-DockDir="${HomeDir}dockrepo/"
-AppDir="${DockDir}sysdata/${AppName}/"
-FileName="${AppName}dirs.tar.gz"
-#        https://github.com/fpirri/gothings-raspi-start/raw/main/raspistartdirs.tar.gz
-GitFile="https://github.com/fpirri/gothings-${AppType}-${AppName}/raw/main/${FileName}"
-LocalFile="${HomeDir}${FileName}"
-# ----------------------------------
-# costanti varie
-Red='\033[0;41;30m'
-Std='\033[0;0;39m'
-#
-#
-##########################################################################
-#  Funzioni utili
-##########################################################################
-avanti(){
-# Domanda di continuazione personalizzabile
-# call:    avanti \$1
-#   \$1:   <stringa di domanda>
-  echo "----------------------------------------------------------------"
-  read -rsp "$1" -n 1 key
-  echo
-}
-#
-pause() {
-#  Domanda 'continue or exit'
-  avanti 'Press any key to continue or ^C to exit ...'
-}
-#
-##########################################################################
-dots(){
-# wait $1 seconds, printing dots on the screen
-#   $1 :  # of seconds to wait
-  local param1
-  printf -v param1 '%d\n' $1 2>/dev/null # converti in intero con tutti i controlli
-  while [ $param1 -gt 0 ]
-  do
-    echo -n "."
-    sleep 0.5
-    echo -n "."
-    sleep 0.5
-    let "--param1"
-  done
-}
-#
-##########################################################################
-dots_nl(){ #  Dots 'new line'
-# wait $1 seconds, printing dots on the screen
-#
-# add a newline at the end
-#
-  dots $1
-  echo
-}
-#
-################################################################################
-#                                                                avvisi iniziali
-echo "This script downloads the archive:"
-echo "  ${FileName}"
-echo "from github and expand it to the ~/dockrepo directory of this machine."
 echo
-echo "Please read the README.md file on"
-echo "  https://github.com/fpirri/gothings-${AppType}-${AppName}#readme"
-echo "for an explanation of the operations that will be performed."
+echo "No errors?"
 echo
-echo "At the end, the user will be able to verify the operations carried out"
-echo "and execute the script for creating the local web server."
-echo "Your sudo password will be asked for in the following."
+echo "Congratulations! You have installed your PC Manager"
 echo
-pause
-#
-################################################################################
-#
-echo ""
-echo "archive to read from github:"
-echo "    ${GitFile}"
-echo "into local file"
-echo "    ${LocalFile}"
+echo "Open a browser in this PC and go to the site:"
+echo "  localhost:5000"
 echo
-wget -O ${LocalFile} $GitFile
+echo "You may like to try the script 'Ping your raspi'"
 echo
-if [[ -s $LocalFile ]]; then
-  echo
-  dots 3
-  echo "The archive file exists, going on ..."
-else
-  echo -e "${Red}"
-  echo
-  echo "File $LocalFile not found, stop processing"
-  echo -e "${Std}"
-  echo
-  return 1
-  echo "-------"
-  exit
-fi
+echo "Please have a look at the documentation at 'www.gothings.org'"
 echo
-echo "Expand into ~/dockrepo ..."
-echo
-sudo tar xpf "${LocalFile}" -C "$HomeDir"
-echo
-echo "Done."
-echo
-#
-################################################################################
-#                                                            exec install script
-#######
-#  give control to the install script
-#######
-echo
-echo
-echo "Install PC Manager ...."
-./dockrepo/install_pc_manager
-echo
-echo "Done."
-echo
-#
-################################################################################
+
