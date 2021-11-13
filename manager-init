@@ -2,8 +2,8 @@
 #                                                                    2020-03-12
 #    Installa bugy/script-server sul PC
 #                                                                  Version="1.00"
-wget -O ${HOME}/managerdirs.tar.gz https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz; \
-sudo tar xpf "${HOME}/managerdirs.tar.gz" -C "${HOME}"; \
+wget -O ${HOME}/managerdirs.tar.gz https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz
+sudo tar xpf "${HOME}/managerdirs.tar.gz" -C "${HOME}";
 ./dockrepo/install_pc_manager
 #
 #
