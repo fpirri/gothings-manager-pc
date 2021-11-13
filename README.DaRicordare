@@ -56,7 +56,7 @@ last commit:
         scratchpad : commit olivetin - 0.01 - 03
         scratchpad : scriptserver: init - v 1.00 - 1
         scratchpad : manageraspi: init - v 1.00 - 1
-        pc-manager : init - v 1.00 - 15
+        pc-manager : first running version - v 1.00 - 17
 
 
 
@@ -94,39 +94,90 @@ PIRRI.ME
 =====================================================================================================\
                                                                                  GoThings Manager PC  |
 scopo:
-  - gestire tutto dal PC con un browser
-  - installare tutto con un solo script
+  - installare la parte base con un solo script
+  - gestire tutto il resto dal PC con un browser
+    - admin solo da docker host del server
+    - esecuzione anche da altri browser
 
 Strategia:
   - si install lo script-server su PC come servizio docker
   - script di start classico per docker
-
-Strategia bis:
-  - si aggiunge uno script che prima installa il docker, poi installa
-    il Manager-PC
+  - immagine personalizzata a partire dal server originale
+      <-- aggiungere sudo, nano, ??
 
 Implementazione:
-  - script di start classico: manager-pc-start
-
+  - script di start iniziale nel gitrepo
+  - altri script in ./dockrepo dentro il .tar.gz
+  - README aggiuntivi?
 
 Quick Start:
+---- prerequisiti:
+- PC con docker
+  -documentare in readme
+  - mettere uno script per ubuntu in ./dockrepo
+      <-- vedi il passo 0bis sotto
 
----- passo 0 : download software from github
-da terminal in $home:
-    wget -O ${HOME}/manager-init https://github.com/fpirri/gothings-pc-manager/blob/main/manager-init
-      <-- espande l'archivio managedirs.tar.gz in dockrepo
-                                 https://github.com/fpirri/gothings-pc-manager/blob/main/manager-init
+---- passo 0 : install ambiente docker
+Si consiglia di seguire i ref.
+  ?
+  ?
 
----- passo 1 : install ambiente docker
-Chiamato dallo script di install:
+---- passo 1 : download software from github
+- da terminale:
+    wget -O ${HOME}/managerdirs.tar.gz https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz
+    sudo tar xpf "${HOME}/managerdirs.tar.gz" -C "${HOME}"; \ ./dockrepo/install_pc_manager
+- per partire la prima volta:
+    dockrepo/install+pc_manager
 
-NOTA: install_pc_manager  -->  verificare docker, creare i networks,  ?
-      
+---- passo 2 : gestione del pc-manager:
+    dockrepo/start_pc_manager        lancia il pc-manager
+                                     <-- riparte automaticamente al prossimo reboot
+    dockrepo/stop_pc_manager         ferma momentaneamente il pc-manager
+                                     <-- riparte automaticamente al prossimo reboot
+    dockrepo/down_pc_manager         ferma definitivamente il pc-manager
+                                     <-- non ripartira' al prossimo reboot
+                                     <-- eseguire  dockrepo/start_pc_manager per ricominciare
 
----- passo 2 : start docker script server
-Chiamato dallo script di install:
+
+------------------------------------------------------------ Build manager image
+- costruzione immagine docker dello scrip-server sul PC
+  - volumi docker usati:
+      .../manager/                 sezione sysdata per pc-manager
+        .../conf/
+            .../runners/           dir per le definizioni degli script
+                  /...             un file per ogni script
+            .../conf.json          configurazione dl server
+            .../logging.json       formato dei logs
+            .../example.json       un esempio di conf.json per riferimento
+        .../logs/                  files di log
+        .../scripts/               dir per gli script
+            ...??                  un file per ogni script
+
+  - build immagine
+    - download .zip dei sorgenti                                             <-- DA AUTOMATIZZARE
+    - sorgenti nel dir 'manager', da copiare nell'immagine                   <-- DA AUTOMATIZZARE
+    - costruzione dell'immagine con lo script 'build_pc_manager'
+        <-- realizzarlo come script nello script-server ???
+  - per ora si parte ancora l'immagine python3.9-slim
+    - si installa ssh                                <-- necessario per parlare con la raspi
+    - si aggiunge nano, per fare edit da dentro il container
 
 
+
+--------------------------------------------------------- aggiornamenti in corso
+- DA INSERIRE in install_pc_manager:
+  -->  creare i networks   <--OK
+       verificare docker   <-- da fare
+       informare esistenza start, stop & down
+       mettere un 'pause' prima della fine
+
+- installare ssh
+  apt update
+  apt install -y openssh-server            <-- aggiungere nano
+    --> ssh user@host dovrebbe funzionare
+
+
+-----------------------------------------------------------------------  history
 
 ---------------------  ADMIN
 in conf.json vanno definiti:
@@ -137,15 +188,35 @@ dal docker network bridge interno
   (congettura probabilmente valida ...)
 
 
----------------------
+--------------------------------------------------------------------------------
+----------------------------------------------------------------------- In Corso
 
-ALTERNATIVA al passo 0  (equivalente)
-wget -O ${HOME}/managerdirs.tar.gz https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz; \
-sudo tar xpf "${HOME}/managerdirs.tar.gz" -C "${HOME}"; \
-./dockrepo/install_pc_manager
-                                   https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz
-  <==== FUNZIONA !
+----------------------  TEST da fare
+- stop/restart del manager al reboot del PC
+- whoami  <-- ?
 
+
+----------------------  Aggiornamento
+manager-init
+  <-- mettere lo script per il download & start del pc manager
+  <-- scarica il tar.gz, lo espande e fa partire lo script-server
+
+docker-install
+  <-- da aggiungere
+  <-- riferimenti a tutorials 'install docker & docker-compose'
+  <-- script super semplice con i passi dedotti dai ref di cui sopra
+  <-- versioni per gli OS che uso io
+  <-- aggiungere windows ...
+  <-- mettere docker-install dentro ~/dockrepo?
+
+aggiustare il readme
+  - parlare dello sviluppo con <main repo>-aux
+      <-- qui stanno i sorgenti di quello che va in <repo>dirs.tar.gz
+
+aggiustare lo scratchpad, con il privato in scratchpad-aux
+
+prima di fare il dockerfile, vedi:
+  https://medium.com/swlh/alpine-slim-stretch-buster-jessie-bullseye-bookworm-what-are-the-differences-in-docker-62171ed4531d
 
 
                                                                                  GoThings Manager PC  |
@@ -1360,6 +1431,104 @@ Un sito internet per realizzare un aggregatore di dati in stile IDN
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 -----^  parte da copiare
+
+
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+---------------------------------------------------------------------------------------------------- 2021-11-10
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\------>>>>  INIZIO
+                                                                                   *** PC Manager ***
+
+
+=====================================================================================================\
+                                                                                 GoThings Manager PC  |
+scopo:
+  - gestire tutto dal PC con un browser
+  - installare tutto con un solo script
+
+Strategia:
+  - si install lo script-server su PC come servizio docker
+  - script di start classico per docker
+
+Strategia bis:
+  - si aggiunge uno script che prima installa il docker, poi installa
+    il Manager-PC
+
+Implementazione:
+  - script di start classico: manager-pc-start
+
+
+Quick Start:
+
+---- passo 0 : download software from github
+da terminal in $home:
+    wget -O ${HOME}/manager-init https://github.com/fpirri/gothings-pc-manager/blob/main/manager-init
+      <-- espande l'archivio managedirs.tar.gz in dockrepo
+                                 https://github.com/fpirri/gothings-pc-manager/blob/main/manager-init
+
+---- passo 1 : install ambiente docker
+Chiamato dallo script di install:
+
+NOTA: install_pc_manager  -->  verificare docker, creare i networks,  ?
+      
+
+---- passo 2 : start docker script server
+Chiamato dallo script di install:
+
+
+
+---------------------  ADMIN
+in conf.json vanno definiti:
+	"admin_users": [ "172.29.196.1", "192.168.1.110", "192.168.4.197" ],
+    "trusted_ips": [ "172.29.196.1", "192.168.0.0/16" ]
+dove l'admin e' "172.29.196.1", ovvero il browser sul docker host che passa 
+dal docker network bridge interno
+  (congettura probabilmente valida ...)
+
+
+---------------------
+
+ALTERNATIVA al passo 0  (equivalente)
+wget -O ${HOME}/managerdirs.tar.gz https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz; \
+sudo tar xpf "${HOME}/managerdirs.tar.gz" -C "${HOME}"; \
+./dockrepo/install_pc_manager
+                                   https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz
+  <==== FUNZIONA !
+
+
+----------------------  Aggiornamento
+manager-init
+  <-- mettere lo script per il download & start del pc manager
+  <-- scarica il tar.gz, lo espande e fa partire lo script-server
+
+docker-install
+  <-- da aggiungere
+  <-- riferimenti a tutorials 'install docker & docker-compose'
+  <-- script super semplice con i passi dedotti dai ref di cui sopra
+  <-- versioni per gli OS che uso io
+  <-- aggiungere windows ...
+  <-- mettere docker-install dentro ~/dockrepo?
+
+aggiustare il readme
+  - parlare dello sviluppo con <main repo>-aux
+      <-- qui stanno i sorgenti di quello che va in <repo>dirs.tar.gz
+
+
+
+
+                                                                                 GoThings Manager PC  |
+=====================================================================================================/
+
+                                                                                   *** PC Manager ***
+////////////////////////////////////////////////////////////////////////////////////////////////////------>>>>   FINE
+----------------------------------------------------------------------------------------------------
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
 
 
 
