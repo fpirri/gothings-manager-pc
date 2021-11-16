@@ -1,21 +1,26 @@
 #!/bin/bash
 #                                                                    2020-03-12
 #    Installa bugy/script-server sul PC
-#                                                                  Version="1.00"
-wget -O ${HOME}/managerdirs.tar.gz https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz
-sudo tar xpf "${HOME}/managerdirs.tar.gz" -C "${HOME}";
-./dockrepo/pc-manager/install_pc_manager
-#
-#
-#
-#===============================================================================
-#                                                                 Organizzazione
-#  download latest manager da repository
-#  installa sul PC
 #
 ################################################################################
+#                                          download latest manager da repository
 #
-#==============================================================================
+wget -O ${HOME}/managerdirs.tar.gz https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz
+#
+################################################################################
+#                                                             expand in dockrepo
+#
+sudo tar xpf "${HOME}/managerdirs.tar.gz" -C "${HOME}"
+#
+#
+################################################################################
+#                                                                installa sul PC
+#
+./dockrepo/pc-manager/install_pc_manager
+#
+################################################################################
+#                                                                Avvisa l'utente
+#
 echo
 echo "============================================================ PC GOTHINGS"
 echo
@@ -23,9 +28,6 @@ echo "      GOTHINGS boot loader for PC Manager"
 echo
 echo "============================================================ version 1.00"
 echo
-#
-################################################################################
-#
 echo
 echo "No errors?"
 echo
@@ -38,4 +40,3 @@ echo "You may like to try the script 'Ping your raspi'"
 echo
 echo "Please have a look at the documentation at 'www.gothings.org'"
 echo
-
