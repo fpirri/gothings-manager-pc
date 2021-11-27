@@ -3,6 +3,12 @@
 #    Installa bugy/script-server sul PC
 #
 ################################################################################
+#                                                              exec manager-init
+#  questo file va scaricato dal repo ed eseguito sul PC:
+#    wget -O ${HOME}/manager-init https://github.com/fpirri/gothings-pc-manager/raw/main/manager-init
+#    source manager-init
+#
+################################################################################
 #                                          download latest manager da repository
 #
 wget -O ${HOME}/managerdirs.tar.gz https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz
