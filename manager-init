@@ -4,9 +4,33 @@
 #
 ################################################################################
 #                                                              exec manager-init
-#  questo file va scaricato dal repo ed eseguito sul PC:
-#    wget -O ${HOME}/manager-init https://github.com/fpirri/gothings-pc-manager/raw/main/manager-init
-#    source manager-init
+#  questo file va scaricato dal repo ed eseguito sul PC
+#  oneliner:
+#    wget -O ${HOME}/manager-init https://github.com/fpirri/gothings-pc-manager/raw/main/manager-init && source ${HOME}/manager-init
+#
+################################################################################
+#                                                                       set dirs
+echo
+echo "Verify directory structure ..."
+# la prima volta non ci sono i dirs, creiamoli !
+#
+# ~/dockrepo/
+  if [ ! -d "~/dockrepo" ]; then
+    mkdir "dockrepo"
+  fi
+# ~/dockrepo/pc-manager/
+  if [ ! -d "~/dockrepo/pc-manager/" ]; then
+    mkdir "~/dockrepo/pc-manager/"
+  fi
+# verify
+cd ~/dockrepo/pc-manager/
+Result=$?
+if [ $Result -gt 0 ]
+then
+  echo "$Result error - cannot cd into pc-manager directory"
+  exit 33
+fi
+echo "now in pc-manager directory"
 #
 ################################################################################
 #                                          download latest manager da repository
