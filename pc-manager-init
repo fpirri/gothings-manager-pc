@@ -25,30 +25,43 @@ ManagerDir="${Dockrepo}pc-manager"
   if [ ! -d "$ManagerDir" ]; then
     mkdir "$ManagerDir"
   fi
+# ~/dockrepo/temp/
+TempDir="${Dockrepo}temp"
+  if [ ! -d "$ManagerDir" ]; then
+    mkdir "$ManagerDir"
+  fi
 # verify
-cd /$HOME/dockrepo/pc-manager/
+cd /$HOME/dockrepo/temp/
 Result=$?
 if [ $Result -gt 0 ]
 then
-  echo "$Result error - cannot cd into pc-manager directory"
+  echo "$Result error - cannot cd into temp directory"
   exit 33
 fi
-echo "now in pc-manager directory"
+echo "now in temp directory"
 #
 ################################################################################
 #                                          download latest manager da repository
 #
-wget -O ${HOME}/managerdirs.tar.gz https://github.com/fpirri/gothings-pc-manager/raw/main/managerdirs.tar.gz
+wget -O ${TempDir}/pc-managerdirs.tar.gz https://github.com/fpirri/gothings-pc-manager/raw/main/pc-managerdirs.tar.gz
 #
 ################################################################################
 #                                                             expand in dockrepo
 #
-sudo tar xpf "${HOME}/managerdirs.tar.gz" -C "${HOME}"
+sudo tar xpf "${TempDir}/managerdirs.tar.gz" -C "${HOME}"
 #
 #
 ################################################################################
 #                                                                installa sul PC
 #
+cd /$HOME/dockrepo/pc-manager/
+Result=$?
+if [ $Result -gt 0 ]
+then
+  echo "$Result error - cannot cd into pc-manager directory"
+  exit 35
+fi
+echo "now in pc-manager directory"
 ./dockrepo/pc-manager/install_pc_manager
 #
 ################################################################################
