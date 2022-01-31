@@ -16,7 +16,7 @@ echo "Verify directory structure ..."
 # la prima volta non ci sono i dirs, creiamoli !
 #
 # ~/dockrepo/
-Dockrepo="/$HOME/dockrepo/"
+Dockrepo="$HOME/dockrepo/"
   if [ ! -d "$Dockrepo" ]; then
     mkdir "dockrepo"
   fi
