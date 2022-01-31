@@ -62,7 +62,7 @@ then
   exit 35
 fi
 echo "now in pc-manager directory"
-./dockrepo/pc-manager/install_pc_manager
+./install_pc_manager
 #
 ################################################################################
 #                                                                Avvisa l'utente
