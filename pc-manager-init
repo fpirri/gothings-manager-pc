@@ -31,7 +31,7 @@ TempDir="${Dockrepo}temp"
     mkdir "$TempDir"
   fi
 # verify
-cd /$HOME/dockrepo/temp/
+cd $TempDir
 Result=$?
 if [ $Result -gt 0 ]
 then
