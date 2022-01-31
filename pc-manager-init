@@ -67,7 +67,7 @@ then
   exit 35
 fi
 echo "now in pc-manager directory"
-./install_pc_manager2
+./install_pc_manager
 Result=$?
 if [ $Result -gt 0 ]
 then
