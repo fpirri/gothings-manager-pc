@@ -10,6 +10,12 @@
 #    wget -O ${HOME}/pc-manager-init https://github.com/fpirri/gothings-pc-manager/raw/main/pc-manager-init && bash ${HOME}/pc-manager-init
 #
 ################################################################################
+#                                                                       vars
+Red='\033[0;41;30m'
+Std='\033[0;0;39m'
+########################### aggiungere funzioni di errore, log etc.             DA FARE
+#
+################################################################################
 #                                                                       set dirs
 echo
 echo "Verify directory structure ..."
@@ -67,7 +73,7 @@ if [ $Result -gt 0 ]
 then
   echo "$Result error in pc-manager installation"
   echo
-  echo "GOTHINGS boot loader for PC Manager version $Version FAILED"
+  echo -e "${Red} GOTHINGS boot loader for PC Manager version $Version FAILED ${Std}"
   echo
   exit 37
 fi
