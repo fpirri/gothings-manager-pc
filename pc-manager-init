@@ -48,7 +48,7 @@ wget -O ${TempDir}/pc-managerdirs.tar.gz https://github.com/fpirri/gothings-pc-m
 ################################################################################
 #                                                             expand in dockrepo
 #
-sudo tar xpf "${TempDir}/managerdirs.tar.gz" -C "${HOME}"
+sudo tar xpf "${TempDir}/pc-managerdirs.tar.gz" -C "${HOME}"
 #
 #
 ################################################################################
