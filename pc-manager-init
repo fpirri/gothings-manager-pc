@@ -55,14 +55,14 @@ sudo tar xpf "${TempDir}/pc-managerdirs.tar.gz" -C "${HOME}"
 #                                                                installa sul PC
 #
 cd /$HOME/dockrepo/pc-manager/
-Result=$?
 if [ $Result -gt 0 ]
 then
   echo "$Result error - cannot cd into pc-manager directory"
   exit 35
 fi
 echo "now in pc-manager directory"
-bash install_pc_manager2
+./install_pc_manager2
+Result=$?
 if [ $Result -gt 0 ]
 then
   echo "$Result error in pc-manager installation"
