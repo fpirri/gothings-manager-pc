@@ -1,5 +1,6 @@
 #!/bin/bash
-#                                                                    2020-03-12
+#                                                                    2022-01-31
+                                                                 Version="02.01"
 #    Installa bugy/script-server sul PC
 #
 ################################################################################
@@ -15,15 +16,17 @@ echo "Verify directory structure ..."
 # la prima volta non ci sono i dirs, creiamoli !
 #
 # ~/dockrepo/
-  if [ ! -d "~/dockrepo" ]; then
+Dockrepo="/home/pi/dockrepo/"
+  if [ ! -d "$Dockrepo" ]; then
     mkdir "dockrepo"
   fi
 # ~/dockrepo/pc-manager/
-  if [ ! -d "~/dockrepo/pc-manager/" ]; then
-    mkdir "~/dockrepo/pc-manager/"
+ManagerDir="${Dockrepo}pc-manager"
+  if [ ! -d "$ManagerDir" ]; then
+    mkdir "$ManagerDir"
   fi
 # verify
-cd ~/dockrepo/pc-manager/
+cd /home/pi/dockrepo/pc-manager/
 Result=$?
 if [ $Result -gt 0 ]
 then
@@ -56,7 +59,7 @@ echo "============================================================ PC GOTHINGS"
 echo
 echo "      GOTHINGS boot loader for PC Manager"
 echo
-echo "============================================================ version 1.00"
+echo "============================================================ $Version"
 echo
 echo
 echo "No errors?"
