@@ -62,7 +62,15 @@ then
   exit 35
 fi
 echo "now in pc-manager directory"
-./install_pc_manager
+./install_pc_manager2
+if [ $Result -gt 0 ]
+then
+  echo "$Result error in pc-manager installation"
+  echo
+  echo "GOTHINGS boot loader for PC Manager version $Version FAILED"
+  echo
+  exit 37
+fi
 #
 ################################################################################
 #                                                                Avvisa l'utente
