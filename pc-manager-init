@@ -27,8 +27,8 @@ ManagerDir="${Dockrepo}pc-manager"
   fi
 # ~/dockrepo/temp/
 TempDir="${Dockrepo}temp"
-  if [ ! -d "$ManagerDir" ]; then
-    mkdir "$ManagerDir"
+  if [ ! -d "$TempDir" ]; then
+    mkdir "$TempDir"
   fi
 # verify
 cd /$HOME/dockrepo/temp/
