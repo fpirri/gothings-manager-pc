@@ -62,7 +62,7 @@ then
   exit 35
 fi
 echo "now in pc-manager directory"
-./install_pc_manager2
+bash install_pc_manager2
 if [ $Result -gt 0 ]
 then
   echo "$Result error in pc-manager installation"
