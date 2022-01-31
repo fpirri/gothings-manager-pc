@@ -7,7 +7,7 @@
 #                                                              exec manager-init
 #  questo file va scaricato dal repo ed eseguito sul PC
 #  oneliner:
-#    wget -O ${HOME}/manager-init https://github.com/fpirri/gothings-pc-manager/raw/main/manager-init && source ${HOME}/manager-init
+#    wget -O ${HOME}/pc-manager-init https://github.com/fpirri/gothings-pc-manager/raw/main/pc-manager-init && bash ${HOME}/pc-manager-init
 #
 ################################################################################
 #                                                                       set dirs
@@ -16,7 +16,7 @@ echo "Verify directory structure ..."
 # la prima volta non ci sono i dirs, creiamoli !
 #
 # ~/dockrepo/
-Dockrepo="/home/pi/dockrepo/"
+Dockrepo="/$HOME/dockrepo/"
   if [ ! -d "$Dockrepo" ]; then
     mkdir "dockrepo"
   fi
@@ -26,7 +26,7 @@ ManagerDir="${Dockrepo}pc-manager"
     mkdir "$ManagerDir"
   fi
 # verify
-cd /home/pi/dockrepo/pc-manager/
+cd /$HOME/dockrepo/pc-manager/
 Result=$?
 if [ $Result -gt 0 ]
 then
